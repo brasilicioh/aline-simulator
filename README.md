@@ -10,7 +10,7 @@ Projeto escolar desenvolvido para a disciplina de Física (Mecânica Clássica e
 | ------------------- | ----------------------------------------------- |
 | Brasilicio Henrique | [brasilicioh](https://github.com/brasilicioh)   |
 | Guilherme Aleixo    | [G-Aleixo](https://github.com/G-Aleixo)         |
-| Jade Raquel         | [Jadeoriginal](https://github.com/Jadeoriginal) |
+| Jade Raquel         | [Jadeoriginal](https://github.com/JadeRaquel) |
 | Kaio Henrique       | [PC123456789N](https://github.com/PC123456789N) |
 | Talita Kauane       | [TalitaKauane](https://github.com/TalitaKauane) |
 

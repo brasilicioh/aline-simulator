@@ -1,20 +1,15 @@
-import { useState } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { Credits } from "./Credits";
+import { MainPage } from "./MainPage";
+import { Test } from "./Test";
 
 export default function App() {
-  const [count, setCount] = useState<number>(0);
-
   return (
-    <>
-      <h1>Aline's Simulator</h1>
-
-      <p>Contador porque sim: {count}</p>
-      <button
-        onClick={() => {
-          setCount(count + 1);
-        }}
-      >
-        Aumentar
-      </button>
-    </>
+    <Routes>
+      <Route path="/" element={<MainPage />} />
+      <Route path="/credits" element={<Credits />} />
+      <Route path="/test" element={<Test />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }

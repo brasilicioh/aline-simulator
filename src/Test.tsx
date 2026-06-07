@@ -1,9 +1,13 @@
 import { useRef, useState } from "react";
 
+import aline from "./assets/aline.png";
+
 type MoveStatus = "start" | "moving" | "end";
 
 export function Test() {
   const [moveType, setMoveType] = useState<MoveStatus>("start");
+  const [speed, setSpeed] = useState(1);
+  const [finalDistance, setFinalDistance] = useState(10);
 
   const animationRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number>(0);
@@ -20,8 +24,8 @@ export function Test() {
       if (imageRef.current) imageRef.current.style.left = "0px";
       return;
     }
-    // pixels por segundo
-    const speed = 1000;
+    const metersPerSecond = Math.max(speed, 0.1);
+    const totalDistanceMeters = Math.max(finalDistance, 0.1);
 
     setMoveType("moving");
     const animate = (time: number) => {
@@ -30,10 +34,12 @@ export function Test() {
       const deltaTime = (time - lastTimeRef.current) / 1000;
       lastTimeRef.current = time;
 
-      // máximo em pixels
-      const limit = window.innerWidth - 100;
+      const imageWidth = imageRef.current?.offsetWidth ?? 0;
+      const limit = window.innerWidth - imageWidth;
 
-      const next = positionRef.current + speed * deltaTime;
+      const pixelsPerMeter = limit / totalDistanceMeters;
+      const next =
+        positionRef.current + metersPerSecond * pixelsPerMeter * deltaTime;
 
       if (next >= limit) {
         positionRef.current = limit;
@@ -55,6 +61,32 @@ export function Test() {
 
   return (
     <>
+      <label className="mb-2 flex flex-col gap-1">
+        <span>Velocidade (m/s)</span>
+        <input
+          type="number"
+          min="0"
+          step="0.1"
+          value={speed}
+          onChange={(e) => {
+            setSpeed(Number(e.target.value));
+          }}
+        />
+      </label>
+
+      <label className="mb-2 flex flex-col gap-1">
+        <span>Distância final (m)</span>
+        <input
+          type="number"
+          min="0"
+          step="1"
+          value={finalDistance}
+          onChange={(e) => {
+            setFinalDistance(Number(e.target.value));
+          }}
+        />
+      </label>
+
       <button onClick={moveImage}>
         {moveType === "start"
           ? "Movimentar"
@@ -63,11 +95,18 @@ export function Test() {
             : "Voltar para início"}
       </button>
 
-      <img
-        src="https://static.vecteezy.com/system/resources/thumbnails/044/876/360/small_2x/cat-with-glasses-meme-sticker-tshirt-illustration-free-png.png"
-        className="absolute top-24 w-24 select-none"
-        ref={imageRef}
-      />
+      <div className="relative mt-8 h-40 w-full">
+        <img
+          src={aline}
+          className="absolute left-0 top-0 w-24 select-none"
+          ref={imageRef}
+        />
+
+        <div className="absolute bottom-0 left-0 right-0 flex justify-between">
+          <p className="mx-3">Início (0m)</p>
+          <p className="mx-3">Fim ({finalDistance}m)</p>
+        </div>
+      </div>
     </>
   );
 }

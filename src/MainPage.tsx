@@ -1,39 +1,61 @@
-import { useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 
 export function MainPage() {
-  const [count, setCount] = useState<number>(0);
+
   const navigate = useNavigate();
 
   return (
-    <div>
-      <h1>Aline's Simulator</h1>
+    <div className="
+      w-screen h-screen bg-gray-500
+      items-center flex flex-col
+    ">
+      <h1 className="bg-black h-10 w-[75%] rounded flex items-center justify-center">
+        <p className="text-white">Psychis scimulator</p>
+      </h1>
 
-      <p>Contador porque sim: {count}</p>
-      <button
-        onClick={() => {
-          setCount(count + 1);
-        }}
-      >
-        Aumentar
-      </button>
+      <div className="flex flex-1 items-center">
+        <div className="grid grid-cols-3 gap-5">
+          <div className="flex text-white bg-black h-75 w-50 justify-center rounded-2xl border-white">
+            <button
+              type="button"
+              onClick={() => {
+                void navigate("/test");
+              }}
+            >
+              Ir para Teste
+            </button>
+          </div>
 
-      <div>
-        <p>Navegacao</p>
-        <button type="button" onClick={() => void navigate("/credits")}>
-          Ir para Créditos
-        </button>
+          <div className="flex text-white bg-black h-75 w-50 justify-center rounded-2xl border-white">
+            <button
+              type="button"
+              onClick={() => {
+                void navigate("/test");
+              }}
+            >
+              Ir para Teste
+            </button>
+          </div>
+
+          <div className="flex text-white bg-black h-75 w-50 justify-center rounded-2xl border-white">
+            <button
+              type="button"
+              onClick={() => {
+                void navigate("/test");
+              }}
+            >
+              Ir para Teste
+            </button>
+          </div>
+        </div>
+
       </div>
-      <div>
-        <button
-          type="button"
-          onClick={() => {
-            void navigate("/test");
-          }}
-        >
-          Ir para Teste
-        </button>
+
+      <div className="flex">
+        <h1>creditos</h1>
       </div>
+
     </div>
   );
 }

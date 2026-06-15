@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import aline from "./assets/aline.png";
 
 export function MainPage() {
 

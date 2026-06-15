@@ -1,5 +1,5 @@
-
 import { useNavigate } from "react-router-dom";
+import aline from "./assets/aline.png";
 
 export function MainPage() {
 
@@ -7,55 +7,66 @@ export function MainPage() {
 
   return (
     <div className="
-      w-screen h-screen bg-gray-500
-      items-center flex flex-col
+      w-full h-screen
+      grid grid-cols-2 bg-[#0D1117]
     ">
-      <h1 className="bg-black h-10 w-[75%] rounded flex items-center justify-center">
-        <p className="text-white">Psychis scimulator</p>
-      </h1>
 
-      <div className="flex flex-1 items-center">
-        <div className="grid grid-cols-3 gap-5">
-          <div className="flex text-white bg-black h-75 w-50 justify-center rounded-2xl border-white">
+      <div className="relative w-full h-full bg-[url(./assets/aline.png)] bg-cover bg-center bg-no-repeat">
+        <div className="absolute inset-0 bg-linear-to-r from-transparent via-transparent to-[#0D1117]" />
+      </div>
+
+      <div className="flex flex-col items-center justify-evenly bg-[#0D1117]">
+
+        <h1 className="text-white border-white border flex items-center justify-center mt-6 py-2 w-[85%] bg-black">
+          <p className="text-4xl font-semibold text-center">~$ Aline's Simulator</p>
+          <p className="animate-[piscar-seco_0.8s_steps(1,end)_infinite] font-bold self-end">___</p>
+        </h1>
+        
+        <div className="flex w-full flex-1 flex-col justify-between items-center gap-5">
+          <hr className="text-white w-[75%] mt-10"/>
+          <div className="justify-between flex flex-col w-full items-center gap-5">
             <button
               type="button"
               onClick={() => {
                 void navigate("/test");
               }}
+              className="border-white border-4 rounded-2xl border-double w-[80%] h-15 font-semibold text-white cursor-pointer hover:scale-105 hover:bg-gray-950"
             >
-              Ir para Teste
+              Movimento Retilineo Uniforme
             </button>
-          </div>
 
-          <div className="flex text-white bg-black h-75 w-50 justify-center rounded-2xl border-white">
             <button
               type="button"
               onClick={() => {
                 void navigate("/test");
               }}
+              className="border-white border-4 rounded-2xl border-double w-[80%] h-15 font-semibold text-white cursor-pointer hover:scale-105 hover:bg-gray-950"
             >
-              Ir para Teste
+              Movimento Retilineo variado
             </button>
-          </div>
 
-          <div className="flex text-white bg-black h-75 w-50 justify-center rounded-2xl border-white">
             <button
               type="button"
               onClick={() => {
                 void navigate("/test");
               }}
+              className="border-white border-4 rounded-2xl border-double w-[80%] h-15 font-semibold text-white cursor-pointer hover:scale-105 hover:bg-gray-950"
             >
-              Ir para Teste
+              Queda Livre
             </button>
           </div>
+          <hr className="text-white w-[75%] mb-10"/>
+        </div>
+
+        <div className="flex h-20">
+          <p className="text-white font-semibold cursor-pointer" onClick={() => {
+            void navigate("/credits");
+          }}>
+            Créditos
+          </p>
         </div>
 
       </div>
-
-      <div className="flex">
-        <h1>creditos</h1>
-      </div>
-
     </div>
   );
 }

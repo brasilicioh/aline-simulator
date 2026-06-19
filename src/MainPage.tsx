@@ -16,9 +16,9 @@ export function MainPage() {
 
       <div className="flex flex-col items-center justify-evenly bg-[#0D1117]">
 
-        <h1 className="text-white border-white border flex items-center justify-center mt-6 py-2 w-[85%] bg-black">
+        <h1 className="text-white border-white border-6 border-bs-gray-600 border-s-gray-600 flex items-center justify-center mt-6 py-2 w-[85%] bg-black">
           <p className="text-4xl font-semibold text-center">~$ Aline's Simulator</p>
-          <p className="animate-[piscar-seco_0.8s_steps(1,end)_infinite] font-bold self-end">___</p>
+          <p className="animate-[piscar-seco_1.5s_steps(1,end)_infinite] font-bold self-end">___</p>
         </h1>
         
         <div className="flex w-full flex-1 flex-col justify-between items-center gap-5">
@@ -29,9 +29,10 @@ export function MainPage() {
               onClick={() => {
                 void navigate("/test");
               }}
-              className="border-white border-4 rounded-2xl border-double w-[80%] h-15 font-semibold text-white cursor-pointer hover:scale-105 hover:bg-gray-950"
+              className="border-white border-t-gray-500 border-s-gray-500 border-2 flex group items-center gap-1 justify-center border-double w-[80%] h-15 font-semibold text-white cursor-pointer hover:scale-102 bg-black"
             >
-              Movimento Retilineo Uniforme
+              <p>Movimento Retilineo Uniforme</p>
+              <p className="invisible group-hover:visible animate-[piscar-seco_0.8s_steps(1,end)_infinite] font-bold self-center">.</p>
             </button>
 
             <button
@@ -39,9 +40,10 @@ export function MainPage() {
               onClick={() => {
                 void navigate("/test");
               }}
-              className="border-white border-4 rounded-2xl border-double w-[80%] h-15 font-semibold text-white cursor-pointer hover:scale-105 hover:bg-gray-950"
+              className="border-white border-t-gray-500 border-s-gray-500 flex items-center group justify-center gap-1 border-2 border-double w-[80%] h-15 font-semibold text-white cursor-pointer hover:scale-102 bg-black"
             >
-              Movimento Retilineo variado
+              <p>Movimento Retilineo variado</p>
+              <p className="invisible group-hover:visible animate-[piscar-seco_0.8s_steps(1,end)_infinite] font-bold self-center">.</p>
             </button>
 
             <button
@@ -49,16 +51,17 @@ export function MainPage() {
               onClick={() => {
                 void navigate("/test");
               }}
-              className="border-white border-4 rounded-2xl border-double w-[80%] h-15 font-semibold text-white cursor-pointer hover:scale-105 hover:bg-gray-950"
+              className="border-white border-t-gray-500 border-s-gray-500 border-2 flex gap-1 justify-center group items-center border-double w-[80%] h-15 font-semibold text-white cursor-pointer hover:scale-102 bg-black"
             >
-              Queda Livre
+              <p>Queda Livre</p>
+              <p className="invisible group-hover:visible animate-[piscar-seco_0.8s_steps(1,end)_infinite] font-bold self-center">.</p>
             </button>
           </div>
           <hr className="text-white w-[75%] mb-10"/>
         </div>
 
         <div className="flex h-20">
-          <p className="text-white font-semibold cursor-pointer" onClick={() => {
+          <p className="text-white font-semibold text-xl cursor-pointer hover:text-blue-500" onClick={() => {
             void navigate("/credits");
           }}>
             Créditos

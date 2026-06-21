@@ -1,5 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+} from "recharts";
+
 import aline from "./assets/aline.png";
 
 type MoveStatus = "start" | "moving" | "end";
@@ -7,8 +16,16 @@ type MoveStatus = "start" | "moving" | "end";
 export function Test() {
   const [moveType, setMoveType] = useState<MoveStatus>("start");
 
-  const [speed, setSpeed] = useState<string>("1");
-  const [finalDistance, setFinalDistance] = useState<string>("10");
+  const [speed, setSpeed] = useState<number>(1);
+  const [finalDistance, setFinalDistance] = useState<number>(10);
+  const [timePassing, setTimePassing] = useState<number>(0);
+  const graphData = [
+    { time: 0, space: 0 },
+    {
+      time: timePassing,
+      space: Math.min(speed * timePassing, finalDistance),
+    },
+  ];
 
   const animationRef = useRef<number | null>(null);
   const startTimeRef = useRef<number>(0);
@@ -36,6 +53,7 @@ export function Test() {
     if (imageRef.current) imageRef.current.style.transform = "translateX(0px)";
 
     setMoveType("start");
+    setTimePassing(0);
   };
 
   const moveImage = () => {
@@ -44,14 +62,11 @@ export function Test() {
       return;
     }
 
-    const metersPerSecond = Number(speed);
-    const totalDistanceMeters = Number(finalDistance);
-
     if (
-      Number.isNaN(metersPerSecond) ||
-      Number.isNaN(totalDistanceMeters) ||
-      metersPerSecond <= 0 ||
-      totalDistanceMeters <= 0
+      Number.isNaN(speed) ||
+      Number.isNaN(finalDistance) ||
+      speed <= 0 ||
+      finalDistance <= 0
     ) {
       alert("Velocidade e distância devem ser maiores que zero.");
       return;
@@ -62,7 +77,7 @@ export function Test() {
 
     const limit = trackWidth - imageWidth;
 
-    const durationSeconds = totalDistanceMeters / metersPerSecond;
+    const durationSeconds = finalDistance / speed;
 
     setMoveType("moving");
 
@@ -70,6 +85,7 @@ export function Test() {
       if (!startTimeRef.current) startTimeRef.current = time;
 
       const elapsedSeconds = (time - startTimeRef.current) / 1000;
+      setTimePassing(Math.min(elapsedSeconds, durationSeconds));
 
       const progress = Math.min(elapsedSeconds / durationSeconds, 1);
 
@@ -101,11 +117,10 @@ export function Test() {
           disabled={isMoving}
           value={speed}
           onChange={(e) => {
-            setSpeed(e.target.value);
+            setSpeed(Number(e.target.value));
           }}
         />
       </label>
-
       <label className="mb-2 flex flex-col gap-1">
         <span>Distância final (m)</span>
         <input
@@ -115,11 +130,10 @@ export function Test() {
           disabled={isMoving}
           value={finalDistance}
           onChange={(e) => {
-            setFinalDistance(e.target.value);
+            setFinalDistance(Number(e.target.value));
           }}
         />
       </label>
-
       <button onClick={moveImage}>
         {moveType === "start"
           ? "Movimentar"
@@ -127,7 +141,6 @@ export function Test() {
             ? "Interromper"
             : "Voltar para início"}
       </button>
-
       <div ref={screenRef} className="relative mt-8 h-40 w-full border">
         <img
           ref={imageRef}
@@ -140,6 +153,29 @@ export function Test() {
           <p>Fim ({finalDistance}m)</p>
         </div>
       </div>
+      <p>Tempo passado: {timePassing.toFixed(3)}</p>
+
+      <LineChart width={600} height={300} data={graphData}>
+        <CartesianGrid strokeDasharray="5 3" />
+        <XAxis
+          dataKey="time"
+          type="number"
+          domain={[0, finalDistance / speed]}
+          label={{ value: "Tempo (s)", position: "insideBottom" }}
+        />
+        <YAxis
+          type="number"
+          domain={[0, finalDistance]}
+          label={{ value: "Espaço (m)" }}
+        />
+        <Tooltip />
+        <Line
+          type="linear"
+          dataKey="space"
+          dot={false}
+          isAnimationActive={false}
+        />
+      </LineChart>
     </>
   );
 }

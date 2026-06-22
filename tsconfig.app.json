@@ -8,7 +8,16 @@
     "strict": true,
     "skipLibCheck": true,
 
-    /* Bundler mode */
+    "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
+    "paths": {
+      "@pages/*": ["./src/pages/*"],
+      "@mru/*": ["./src/simulations/mru/*"],
+      "@charts/*": ["./src/components/charts/*"],
+      "@animation": ["./src/hooks/useAnimation.ts"],
+      "@assets/*": ["./src/assets/*"]
+    },
+
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,

@@ -1,14 +1,15 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { Credits } from "./Credits";
-import { MainPage } from "./MainPage";
-import { Test } from "./Test";
+import { Credits } from "@pages/Credits";
+import { MainPage } from "@pages/MainPage";
+
+import { MRUSimulator } from "@mru/MRUSimulator";
 
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<MainPage />} />
       <Route path="/credits" element={<Credits />} />
-      <Route path="/test" element={<Test />} />
+      <Route path="/mru" element={<MRUSimulator />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

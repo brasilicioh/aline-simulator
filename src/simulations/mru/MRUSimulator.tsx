@@ -1,54 +1,32 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-} from "recharts";
+import { PositionTimeChart } from "@charts/PositionTimeChart";
+import { useAnimation } from "@animation";
 
-import aline from "./assets/aline.png";
+import { buildMRUGraphData } from "@mru/graph";
+import { calculateMRUDuration } from "@mru/formulas";
 
-type MoveStatus = "start" | "moving" | "end";
+import type { MoveStatus } from "@mru/../types";
 
-export function Test() {
+import aline from "@assets/aline.png";
+
+export function MRUSimulator() {
   const [moveType, setMoveType] = useState<MoveStatus>("start");
 
   const [speed, setSpeed] = useState<number>(1);
   const [finalDistance, setFinalDistance] = useState<number>(10);
   const [timePassing, setTimePassing] = useState<number>(0);
-  const graphData = [
-    { time: 0, space: 0 },
-    {
-      time: timePassing,
-      space: Math.min(speed * timePassing, finalDistance),
-    },
-  ];
-
-  const animationRef = useRef<number | null>(null);
-  const startTimeRef = useRef<number>(0);
+  const graphData = buildMRUGraphData(speed, finalDistance, timePassing);
 
   const imageRef = useRef<HTMLImageElement>(null);
   const screenRef = useRef<HTMLDivElement>(null);
 
+  const animation = useAnimation();
+
   const isMoving = moveType === "moving";
 
-  useEffect(() => {
-    return () => {
-      if (animationRef.current !== null)
-        cancelAnimationFrame(animationRef.current);
-    };
-  }, []);
-
   const resetAnimation = () => {
-    if (animationRef.current !== null) {
-      cancelAnimationFrame(animationRef.current);
-      animationRef.current = null;
-    }
-
-    startTimeRef.current = 0;
+    animation.reset();
 
     if (imageRef.current) imageRef.current.style.transform = "translateX(0px)";
 
@@ -77,33 +55,27 @@ export function Test() {
 
     const limit = trackWidth - imageWidth;
 
-    const durationSeconds = finalDistance / speed;
+    const durationSeconds = calculateMRUDuration(speed, finalDistance);
 
     setMoveType("moving");
 
-    const animate = (time: number) => {
-      if (!startTimeRef.current) startTimeRef.current = time;
+    animation.start({
+      duration: durationSeconds,
 
-      const elapsedSeconds = (time - startTimeRef.current) / 1000;
-      setTimePassing(Math.min(elapsedSeconds, durationSeconds));
+      onFrame(elapsedSeconds, progress) {
+        setTimePassing(elapsedSeconds);
 
-      const progress = Math.min(elapsedSeconds / durationSeconds, 1);
+        const position = limit * progress;
 
-      const position = limit * progress;
+        if (imageRef.current) {
+          imageRef.current.style.transform = `translateX(${position.toString()}px)`;
+        }
+      },
 
-      if (imageRef.current)
-        imageRef.current.style.transform = `translateX(${position.toString()}px)`;
-
-      if (progress >= 1) {
+      onFinish() {
         setMoveType("end");
-        animationRef.current = null;
-        return;
-      }
-
-      animationRef.current = requestAnimationFrame(animate);
-    };
-
-    animationRef.current = requestAnimationFrame(animate);
+      },
+    });
   };
 
   return (
@@ -155,27 +127,11 @@ export function Test() {
       </div>
       <p>Tempo passado: {timePassing.toFixed(3)}</p>
 
-      <LineChart width={600} height={300} data={graphData}>
-        <CartesianGrid strokeDasharray="5 3" />
-        <XAxis
-          dataKey="time"
-          type="number"
-          domain={[0, finalDistance / speed]}
-          label={{ value: "Tempo (s)", position: "insideBottom" }}
-        />
-        <YAxis
-          type="number"
-          domain={[0, finalDistance]}
-          label={{ value: "Espaço (m)" }}
-        />
-        <Tooltip />
-        <Line
-          type="linear"
-          dataKey="space"
-          dot={false}
-          isAnimationActive={false}
-        />
-      </LineChart>
+      <PositionTimeChart
+        data={graphData}
+        maxTime={calculateMRUDuration(speed, finalDistance)}
+        maxDistance={finalDistance}
+      />
     </>
   );
 }

@@ -51,7 +51,7 @@ export function MainPage() {
             <button
               type="button"
               onClick={() => {
-                void navigate("/free-fall");
+                void navigate("/ql");
               }}
               className="border-white border-t-gray-500 border-s-gray-500 border-2 flex gap-1 justify-center group items-center border-double w-[80%] h-15 font-semibold text-white cursor-pointer hover:scale-102 bg-black"
             >

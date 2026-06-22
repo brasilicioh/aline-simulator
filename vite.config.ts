@@ -11,6 +11,8 @@ export default defineConfig({
     alias: {
       "@pages": resolve(__dirname, "src/pages"),
       "@mru": resolve(__dirname, "src/simulations/mru"),
+      "@muv": resolve(__dirname, "src/simulations/muv"),
+      "@ql": resolve(__dirname, "src/simulations/ql"),
       "@charts": resolve(__dirname, "src/components/charts"),
       "@animation": resolve(__dirname, "src/hooks/useAnimation.ts"),
       "@assets": resolve(__dirname, "./src/assets"),

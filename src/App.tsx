@@ -3,6 +3,8 @@ import { Credits } from "@pages/Credits";
 import { MainPage } from "@pages/MainPage";
 
 import { MRUSimulator } from "@mru/MRUSimulator";
+import { MUVSimulator } from "@muv/MUVSimulator";
+import { QLSimulator } from "@ql/QLSimulator";
 
 export default function App() {
   return (
@@ -10,6 +12,8 @@ export default function App() {
       <Route path="/" element={<MainPage />} />
       <Route path="/credits" element={<Credits />} />
       <Route path="/mru" element={<MRUSimulator />} />
+      <Route path="/muv" element={<MUVSimulator />} />
+      <Route path="/ql" element={<QLSimulator />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

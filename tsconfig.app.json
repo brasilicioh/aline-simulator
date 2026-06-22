@@ -13,6 +13,8 @@
     "paths": {
       "@pages/*": ["./src/pages/*"],
       "@mru/*": ["./src/simulations/mru/*"],
+      "@muv/*": ["./src/simulations/muv/*"],
+      "@ql/*": ["./src/simulations/ql/*"],
       "@charts/*": ["./src/components/charts/*"],
       "@animation": ["./src/hooks/useAnimation.ts"],
       "@assets/*": ["./src/assets/*"]

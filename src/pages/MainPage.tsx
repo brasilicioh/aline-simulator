@@ -27,7 +27,7 @@ export function MainPage() {
               onClick={() => {
                 void navigate("/mru");
               }}
-              className="border-white border-t-gray-500 border-s-gray-500 border-2 flex group items-center gap-1 justify-center border-double w-[80%] h-15 font-semibold text-white cursor-pointer hover:scale-102 bg-black"
+              className="border-white border-double border-4 rounded-xl flex group items-center gap-1 justify-center w-[80%] h-15 font-semibold text-white cursor-pointer hover:scale-102 bg-black"
             >
               <p>Movimento Retilíneo Uniforme</p>
               <p className="invisible group-hover:visible animate-[piscar-seco_0.8s_steps(1,end)_infinite] font-bold self-center">
@@ -40,7 +40,7 @@ export function MainPage() {
               onClick={() => {
                 void navigate("/muv");
               }}
-              className="border-white border-t-gray-500 border-s-gray-500 flex items-center group justify-center gap-1 border-2 border-double w-[80%] h-15 font-semibold text-white cursor-pointer hover:scale-102 bg-black"
+              className="border-white border-double rounded-xl flex items-center group justify-center gap-1 border-4 w-[80%] h-15 font-semibold text-white cursor-pointer hover:scale-102 bg-black"
             >
               <p>Movimento Retilíneo Variado</p>
               <p className="invisible group-hover:visible animate-[piscar-seco_0.8s_steps(1,end)_infinite] font-bold self-center">
@@ -53,7 +53,7 @@ export function MainPage() {
               onClick={() => {
                 void navigate("/ql");
               }}
-              className="border-white border-t-gray-500 border-s-gray-500 border-2 flex gap-1 justify-center group items-center border-double w-[80%] h-15 font-semibold text-white cursor-pointer hover:scale-102 bg-black"
+              className="border-white border-4 border-double rounded-xl flex gap-1 justify-center group items-center w-[80%] h-15 font-semibold text-white cursor-pointer hover:scale-102 bg-black"
             >
               <p>Queda Livre</p>
               <p className="invisible group-hover:visible animate-[piscar-seco_0.8s_steps(1,end)_infinite] font-bold self-center">

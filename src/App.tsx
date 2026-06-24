@@ -5,6 +5,7 @@ import { MainPage } from "@pages/MainPage";
 import { MRUSimulator } from "@mru/MRUSimulator";
 import { MUVSimulator } from "@muv/MUVSimulator";
 import { QLSimulator } from "@ql/QLSimulator";
+import SimFrame from "./components/frames/SimFrame";
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
       <Route path="/mru" element={<MRUSimulator />} />
       <Route path="/muv" element={<MUVSimulator />} />
       <Route path="/ql" element={<QLSimulator />} />
+      <Route path="/test" element={<SimFrame />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

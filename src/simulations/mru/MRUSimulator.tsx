@@ -12,6 +12,7 @@ import {
 } from "@mru/animate";
 
 import type { MoveStatus } from "@mru/../types";
+import SimFrame from "../../components/frames/SimFrame";
 import { renderPosition, verifyValues } from "@mru/../utils";
 
 import aline from "@assets/aline.png";
@@ -247,6 +248,15 @@ export function MRUSimulator() {
         maxTime={duration}
         minDistance={startPosition}
         maxDistance={finalPosition}
+      />
+
+      <SimFrame
+      speed={speed} setSpeed={setSpeed}
+      //startDistance={startDistance} setStartDistance={setStartDistance}
+      //actualDistance={actualDistance} setActualDistance={setActualDistance}
+      finalDistance={finalDistance} setFinalDistance={setFinalDistance}
+      timePassing={timePassing} setTimePassing={setTimePassing}
+      moveImage={moveImage} moveType={moveType}
       />
     </>
   );

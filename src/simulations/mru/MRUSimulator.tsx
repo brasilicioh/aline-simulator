@@ -20,6 +20,7 @@ export function MRUSimulator() {
 
   const imageRef = useRef<HTMLImageElement>(null);
   const screenRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef(0);
 
   const animation = useAnimation();
 
@@ -27,6 +28,8 @@ export function MRUSimulator() {
 
   const resetAnimation = () => {
     animation.reset();
+
+    progressRef.current = 0;
 
     if (imageRef.current) imageRef.current.style.transform = "translateX(0px)";
 
@@ -52,7 +55,6 @@ export function MRUSimulator() {
 
     const imageWidth = imageRef.current?.offsetWidth ?? 0;
     const trackWidth = screenRef.current?.clientWidth ?? 0;
-
     const limit = trackWidth - imageWidth;
 
     const durationSeconds = calculateMRUDuration(speed, finalDistance);
@@ -63,13 +65,47 @@ export function MRUSimulator() {
       duration: durationSeconds,
 
       onFrame(elapsedSeconds, progress) {
+        progressRef.current = progress;
+
         setTimePassing(elapsedSeconds);
 
         const position = limit * progress;
 
-        if (imageRef.current) {
+        if (imageRef.current)
           imageRef.current.style.transform = `translateX(${position.toString()}px)`;
-        }
+      },
+
+      onFinish() {
+        setMoveType("end");
+      },
+    });
+  };
+
+  const pauseAnimation = () => {
+    animation.reset();
+    setMoveType("paused");
+  };
+
+  const continueAnimation = () => {
+    setMoveType("moving");
+
+    animation.start({
+      duration: calculateMRUDuration(speed, finalDistance),
+
+      initialProgress: progressRef.current,
+
+      onFrame(elapsedSeconds, progress) {
+        progressRef.current = progress;
+
+        setTimePassing(elapsedSeconds);
+
+        const imageWidth = imageRef.current?.offsetWidth ?? 0;
+        const trackWidth = screenRef.current?.clientWidth ?? 0;
+        const limit = trackWidth - imageWidth;
+        const position = limit * progress;
+
+        if (imageRef.current)
+          imageRef.current.style.transform = `translateX(${position.toString()}px)`;
       },
 
       onFinish() {
@@ -106,13 +142,33 @@ export function MRUSimulator() {
           }}
         />
       </label>
-      <button onClick={moveImage}>
-        {moveType === "start"
-          ? "Movimentar"
-          : moveType === "moving"
-            ? "Interromper"
-            : "Voltar para início"}
-      </button>
+
+      {moveType === "start" && (
+        <button className="mx-2" onClick={moveImage}>
+          Iniciar
+        </button>
+      )}
+      {moveType === "moving" && (
+        <button className="mx-2" onClick={pauseAnimation}>
+          Pausar
+        </button>
+      )}
+      {moveType === "paused" && (
+        <>
+          <button className="mx-2" onClick={continueAnimation}>
+            Continuar
+          </button>
+          <button className="mx-2" onClick={resetAnimation}>
+            Voltar ao início
+          </button>
+        </>
+      )}
+      {moveType === "end" && (
+        <button className="mx-2" onClick={resetAnimation}>
+          Voltar ao início
+        </button>
+      )}
+
       <div ref={screenRef} className="relative mt-8 h-40 w-full border">
         <img
           ref={imageRef}

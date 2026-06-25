@@ -1,1 +1,1 @@
-export type MoveStatus = "start" | "moving" | "end";
+export type MoveStatus = "start" | "moving" | "paused" | "end";

@@ -13,10 +13,16 @@ type Props = {
     space: number;
   }[];
   maxTime: number;
+  minDistance: number;
   maxDistance: number;
 };
 
-export function PositionTimeChart({ data, maxTime, maxDistance }: Props) {
+export function PositionTimeChart({
+  data,
+  maxTime,
+  minDistance,
+  maxDistance,
+}: Props) {
   return (
     <LineChart width={600} height={300} data={data}>
       <CartesianGrid strokeDasharray="5 3" />
@@ -31,7 +37,7 @@ export function PositionTimeChart({ data, maxTime, maxDistance }: Props) {
       />
       <YAxis
         type="number"
-        domain={[0, maxDistance]}
+        domain={[minDistance, maxDistance]}
         label={{
           value: "Espaço (m)",
         }}

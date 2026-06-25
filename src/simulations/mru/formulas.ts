@@ -1,11 +1,17 @@
+// fórmulas de MRU
+
 export function calculateMRUDuration(speed: number, distance: number): number {
-  return distance / speed;
+  return distance / Math.abs(speed);
 }
 
 export function calculateMRUPosition(
+  initialPosition: number,
+  targetPosition: number,
   speed: number,
   time: number,
-  maxDistance: number,
-): number {
-  return Math.min(speed * time, maxDistance);
+) {
+  const position = initialPosition + speed * time;
+  return speed > 0
+    ? Math.min(position, targetPosition)
+    : Math.max(position, targetPosition);
 }

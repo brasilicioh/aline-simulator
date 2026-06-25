@@ -7,6 +7,7 @@ import { buildMRUGraphData } from "@mru/graph";
 import { calculateMRUDuration } from "@mru/formulas";
 
 import type { MoveStatus } from "@mru/../types";
+import SimFrame from "../../components/frames/SimFrame";
 
 import aline from "@assets/aline.png";
 
@@ -131,6 +132,15 @@ export function MRUSimulator() {
         data={graphData}
         maxTime={calculateMRUDuration(speed, finalDistance)}
         maxDistance={finalDistance}
+      />
+
+      <SimFrame
+      speed={speed} setSpeed={setSpeed}
+      //startDistance={startDistance} setStartDistance={setStartDistance}
+      //actualDistance={actualDistance} setActualDistance={setActualDistance}
+      finalDistance={finalDistance} setFinalDistance={setFinalDistance}
+      timePassing={timePassing} setTimePassing={setTimePassing}
+      moveImage={moveImage} moveType={moveType}
       />
     </>
   );

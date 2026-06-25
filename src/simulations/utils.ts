@@ -1,3 +1,5 @@
+// funções que podem ser usadas em qualquer módulo
+
 export function getPixelsPerMeter(
   startPosition: number,
   finalPosition: number,

@@ -1,3 +1,5 @@
+// fórmulas de MRU
+
 export function calculateMRUDuration(speed: number, distance: number): number {
   return distance / Math.abs(speed);
 }

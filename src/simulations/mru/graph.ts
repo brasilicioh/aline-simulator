@@ -1,5 +1,8 @@
 import { calculateMRUPosition } from "@mru/formulas";
 
+// função que define as informações da tabela
+
+// TODO: adicionar vários pontos e não apenas o primeiro e último
 export function buildMRUGraphData(
   speed: number,
   initialPosition: number,

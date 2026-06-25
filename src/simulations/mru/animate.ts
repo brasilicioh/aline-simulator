@@ -1,5 +1,7 @@
 import type { useAnimation } from "@animation";
 
+// funções utilizadas na animação
+
 export function calculateAnimationPosition(
   initialPosition: number,
   targetPosition: number,

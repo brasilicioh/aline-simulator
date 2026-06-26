@@ -61,17 +61,25 @@ export default function SimFrame( {
   graphData, maxTime
 
 }:SimProps ) {
+  const totalDistance = finalPosition - startPosition;
+
+  const zoom = 300 / (1 + Math.log10(totalDistance + 1));
+
   return (
     <div className="w-full h-screen max-h-screen bg-[#0D1117]">
       <div className="grid grid-cols-1 grid-rows-5 h-full">
         <div className="row-span-3 flex flex-col justify-center items-center">
           <div className="h-[90%] w-[95%] border-black border-4 border-bs-gray-600 border-s-gray-600 flex items-center justify-center relative">
             {/* <h3 className="text-white bg-blue-800 size-full">AlineSim$~ Connection Terminated ▋</h3> */}
-            <div ref={screenRef} className="bg-[url('https://www.gamevicio.com/wp-content/uploads/2020/08/jogador-de-microsoft-flight-simulator-encontra-a-iconica-colina-bliss-imortalizada-no-windows-xp-018456-1.webp')] bg-cover bg-center size-full">
+            <div ref={screenRef} className="bg-[url('https://www.gamevicio.com/wp-content/uploads/2020/08/jogador-de-microsoft-flight-simulator-encontra-a-iconica-colina-bliss-imortalizada-no-windows-xp-018456-1.webp')] bg-cover bg-center size-full bg-repeat-x"
+              style={{
+                backgroundSize: `${zoom}%`
+              }}
+            >
               <img
                 ref={imageRef}
                 src={aline}
-                className="absolute left-0 top-1/2 w-24 select-none"
+                className="absolute rounded-full left-0 top-1/2 w-24 select-none"
               />
               <div className="absolute bottom-0 left-0 right-0 flex justify-between">
                 <p className="text-white bg-blue-800 px-2">Início ({startPosition}m)</p>
@@ -164,6 +172,7 @@ export default function SimFrame( {
               <button className="bg-blue-900 p-2 sm:p-3 rounded-4xl">
                 <RxExit className="size-6 sm:size-8"/>
               </button> */}
+              <p>Tempo passado: {timePassing.toFixed(3)}</p>
               {moveType === "start" && (
                 <button className="bg-blue-800 p-2 sm:p-3 rounded-4xl" onClick={startAnimation}>
                   <FaPlay className="size-6 sm:size-8"/>

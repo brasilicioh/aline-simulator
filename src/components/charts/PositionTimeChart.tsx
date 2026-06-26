@@ -24,7 +24,7 @@ export function PositionTimeChart({
   maxDistance,
 }: Props) {
   return (
-    <LineChart width={600} height={300} data={data}>
+    <LineChart width={300} height={200} data={data}>
       <CartesianGrid strokeDasharray="5 3" />
       <XAxis
         dataKey="time"

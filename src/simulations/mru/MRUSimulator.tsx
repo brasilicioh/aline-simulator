@@ -69,7 +69,7 @@ export function MRUSimulator() {
   };
 
   // função utilitária de animação do início
-  const moveImage = () => {
+  const startAnimation = () => {
     // verifica se todos inputs estão ok
     const error = verifyValues({
       speed,
@@ -204,7 +204,7 @@ export function MRUSimulator() {
       </label>
 
       {moveType === "start" && (
-        <button className="mx-2" onClick={moveImage}>
+        <button className="mx-2" onClick={startAnimation}>
           Iniciar
         </button>
       )}
@@ -252,11 +252,18 @@ export function MRUSimulator() {
 
       <SimFrame
       speed={speed} setSpeed={setSpeed}
-      //startDistance={startDistance} setStartDistance={setStartDistance}
-      //actualDistance={actualDistance} setActualDistance={setActualDistance}
-      finalDistance={finalDistance} setFinalDistance={setFinalDistance}
+      startPosition={startPosition} setStartPosition={setStartPosition}
+      initialPosition={initialPosition} setInitialPosition={setInitialPosition}
+      finalPosition={finalPosition} setFinalPosition={setFinalPosition}
       timePassing={timePassing} setTimePassing={setTimePassing}
-      moveImage={moveImage} moveType={moveType}
+      moveType={moveType}
+
+      screenRef={screenRef} imageRef={imageRef}
+      
+      startAnimation={startAnimation} pauseAnimation={pauseAnimation}
+      continueAnimation={continueAnimation} resetAnimation={resetAnimation}
+
+      graphData={graphData} maxTime={duration}
       />
     </>
   );

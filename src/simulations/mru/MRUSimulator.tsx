@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 
-import { PositionTimeChart } from "@charts/PositionTimeChart";
 import { useAnimation } from "@animation";
 
 import { buildMRUGraphData } from "@mru/graph";
@@ -14,8 +13,6 @@ import {
 import type { MoveStatus } from "@mru/../types";
 import SimFrame from "../../components/frames/SimFrame";
 import { renderPosition, verifyValues } from "@mru/../utils";
-
-import aline from "@assets/aline.png";
 
 export function MRUSimulator() {
   // estado que define o tipo de movimento atual da imagem

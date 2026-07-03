@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 
-import { PositionTimeChart } from "@charts/PositionTimeChart";
 import { useAnimation } from "@animation";
 
 import { buildMRUGraphData } from "@mru/graph";
@@ -14,8 +13,6 @@ import {
 import type { MoveStatus } from "@mru/../types";
 import SimFrame from "../../components/frames/SimFrame";
 import { renderPosition, verifyValues } from "@mru/../utils";
-
-import aline from "@assets/aline.png";
 
 export function MRUSimulator() {
   // estado que define o tipo de movimento atual da imagem
@@ -69,7 +66,7 @@ export function MRUSimulator() {
   };
 
   // função utilitária de animação do início
-  const moveImage = () => {
+  const startAnimation = () => {
     // verifica se todos inputs estão ok
     const error = verifyValues({
       speed,
@@ -153,110 +150,20 @@ export function MRUSimulator() {
 
   return (
     <>
-      <label className="mb-2 flex flex-col gap-1">
-        <span>Velocidade (m/s)</span>
-        <input
-          type="number"
-          min="0"
-          step="0.1"
-          disabled={isMoving}
-          value={speed}
-          onChange={(e) => {
-            setSpeed(Number(e.target.value));
-          }}
-        />
-      </label>
-      <label className="mb-2 flex flex-col gap-1">
-        <span>Posição inicial (m)</span>
-        <input
-          type="number"
-          step="1"
-          disabled={isMoving}
-          value={startPosition}
-          onChange={(e) => {
-            setStartPosition(Number(e.target.value));
-          }}
-        />
-      </label>
-      <label className="mb-2 flex flex-col gap-1">
-        <span>Posição final (m)</span>
-        <input
-          type="number"
-          step="1"
-          disabled={isMoving}
-          value={finalPosition}
-          onChange={(e) => {
-            setFinalPosition(Number(e.target.value));
-          }}
-        />
-      </label>
-      <label className="mb-2 flex flex-col gap-1">
-        <span>Posição de Aline (m)</span>
-        <input
-          type="number"
-          step="1"
-          disabled={isMoving}
-          value={initialPosition}
-          onChange={(e) => {
-            setInitialPosition(Number(e.target.value));
-          }}
-        />
-      </label>
-
-      {moveType === "start" && (
-        <button className="mx-2" onClick={moveImage}>
-          Iniciar
-        </button>
-      )}
-      {moveType === "moving" && (
-        <button className="mx-2" onClick={pauseAnimation}>
-          Pausar
-        </button>
-      )}
-      {moveType === "paused" && (
-        <>
-          <button className="mx-2" onClick={continueAnimation}>
-            Continuar
-          </button>
-          <button className="mx-2" onClick={resetAnimation}>
-            Voltar ao início
-          </button>
-        </>
-      )}
-      {moveType === "end" && (
-        <button className="mx-2" onClick={resetAnimation}>
-          Voltar ao início
-        </button>
-      )}
-
-      <div ref={screenRef} className="relative mt-8 h-40 w-full border">
-        <img
-          ref={imageRef}
-          src={aline}
-          className="absolute left-0 top-0 w-24 select-none"
-        />
-
-        <div className="absolute bottom-0 left-0 right-0 flex justify-between px-3">
-          <p>Início ({startPosition}m)</p>
-          <p>Fim ({finalPosition}m)</p>
-        </div>
-      </div>
-      <p>Tempo passado: {timePassing.toFixed(3)}</p>
-
-      <PositionTimeChart
-        data={graphData}
-        maxTime={duration}
-        minDistance={startPosition}
-        maxDistance={finalPosition}
-      />
-
       <SimFrame
       speed={speed} setSpeed={setSpeed}
-      //startDistance={startDistance} setStartDistance={setStartDistance}
-      //actualDistance={actualDistance} setActualDistance={setActualDistance}
-      finalDistance={finalDistance} setFinalDistance={setFinalDistance}
+      startPosition={startPosition} setStartPosition={setStartPosition}
+      initialPosition={initialPosition} setInitialPosition={setInitialPosition}
+      finalPosition={finalPosition} setFinalPosition={setFinalPosition}
       timePassing={timePassing} setTimePassing={setTimePassing}
-      moveImage={moveImage} moveType={moveType}
+      moveType={moveType}
+
+      screenRef={screenRef} imageRef={imageRef}
+      
+      startAnimation={startAnimation} pauseAnimation={pauseAnimation}
+      continueAnimation={continueAnimation} resetAnimation={resetAnimation}
+
+      graphData={graphData} maxTime={duration}
       />
     </>
   );

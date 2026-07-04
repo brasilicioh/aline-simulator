@@ -16,6 +16,9 @@ interface SimProps {
   speed: number;
   setSpeed: (speed: number) => void;
 
+  acceleration: number;
+  setAcceleration: (acceleration: number) => void;
+
   startPosition: number;
   setStartPosition: (startPosition: number) => void;
 
@@ -35,22 +38,26 @@ interface SimProps {
   imageRef: RefObject<HTMLImageElement>;
 
   //animation section
-  startAnimation: () => void;
+  startAnimation?: () => void;
 
-  pauseAnimation: () => void;
+  pauseAnimation?: () => void;
 
-  continueAnimation: () => void;
+  continueAnimation?: () => void;
 
-  resetAnimation: () => void;
+  resetAnimation?: () => void;
 
   //plott
   graphData: {time: number, space: number}[]; 
   maxTime: number;
+
+  // frame settings
+  isMUV?: boolean;
   
 }
 
 export default function SimFrame( {
   speed, setSpeed,
+  acceleration, setAcceleration,
   startPosition, setStartPosition,
   initialPosition, setInitialPosition,
   finalPosition, setFinalPosition,
@@ -61,7 +68,9 @@ export default function SimFrame( {
 
   startAnimation, pauseAnimation, continueAnimation, resetAnimation,
 
-  graphData, maxTime
+  graphData, maxTime,
+
+  isMUV
 
 }:SimProps ) {
   const navigate = useNavigate();
@@ -87,6 +96,35 @@ export default function SimFrame( {
               />
               <div className="absolute bottom-0 left-0 right-0 flex justify-between">
                 <p className="text-white bg-blue-800 px-2">Início ({startPosition}m)</p>
+                {isMUV && (
+                  <>
+                    {moveType === "start" && (
+                      <button className="bg-blue-800 text-white flex justify-center p-2 w-10" onClick={startAnimation}>
+                        <FaPlay className="size-4 sm:size-4" />
+                      </button>
+                    )}
+                    {moveType === "moving" && (
+                      <button className="bg-blue-800 text-white flex justify-center p-2 w-10" onClick={pauseAnimation}>
+                        <FaPause className="size-4 sm:size-4" />
+                      </button>
+                    )}
+                    {moveType === "paused" &&(
+                      <>
+                        <button className="bg-blue-800 text-white flex justify-center p-2 w-10" onClick={continueAnimation}>
+                          <FaPlay className="size-4 sm:size-4" />
+                        </button>
+                        <button className="bg-blue-800 text-white flex justify-center p-2 w-10" onClick={resetAnimation}>
+                          <MdOutlineReplay className="size-4 sm:size-4" />
+                        </button>
+                      </>
+                    )}
+                    {moveType === "end" &&(
+                      <button className="bg-blue-800 text-white flex justify-center p-2 w-10" onClick={resetAnimation}>
+                        <MdOutlineReplay className="size-4 sm:size-4" />
+                      </button>
+                    )}
+                  </>
+                )}
                 <p className="text-white bg-blue-800 px-2">Fim ({finalPosition}m)</p>
               </div>
             </div>
@@ -103,14 +141,36 @@ export default function SimFrame( {
                 </h2>
               </div>
               
-              <SliderControl
-                label="Velocidade (m/s)"
-                value={speed}
-                onChange={setSpeed}
-                min={0}
-                max={100}
-                step={5}
-              />
+              {isMUV ? (
+                <div className="grid grid-cols-2 gap-3">
+                  <SliderControl
+                    label={isMUV?"Velocidade Inicial (m/s)":"Velocidade (m/s)"}
+                    value={speed}
+                    onChange={setSpeed}
+                    min={0}
+                    max={100}
+                    step={5}
+                  />
+                  
+                  <SliderControl
+                    label="Aceleração (m/s²)"
+                    value={acceleration}
+                    onChange={setAcceleration}
+                    min={-10}
+                    max={10}
+                    step={1}
+                  />
+                </div>
+              ):(
+                <SliderControl
+                  label={isMUV?"Velocidade Inicial (m/s)":"Velocidade (m/s)"}
+                  value={speed}
+                  onChange={setSpeed}
+                  min={0}
+                  max={100}
+                  step={5}
+                />
+              )}
 
               <hr />
 
@@ -157,22 +217,24 @@ export default function SimFrame( {
               <button className="bg-blue-900 p-2 sm:p-3 rounded-4xl">
                 <RxExit className="size-6 sm:size-8"/>
               </button> */}
-              <p>Tempo passado: {timePassing.toFixed(3)}</p>
-              {moveType === "start" && (
+              {!isMUV && (
+                <p>Tempo passado: {timePassing.toFixed(3)}</p>
+              )}
+              {moveType === "start" && !isMUV && (
                 <button className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]" onClick={startAnimation}>
                   <FaPlay className="size-6 sm:size-8 col-start-1" />
                   <p className="col-start-2 text-center">Iniciar Simulação</p>
                   <div className="size-6 sm:size-8 col-start-3 invisible" />
                 </button>
               )}
-              {moveType === "moving" && (
+              {moveType === "moving" && !isMUV && (
                 <button className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]" onClick={pauseAnimation}>
                   <FaPause className="size-6 sm:size-8 col-start-1" />
                   <p className="col-start-2 text-center">Pausar Simulação</p>
                   <div className="size-6 sm:size-8 col-start-3 invisible" />
                 </button>
               )}
-              {moveType === "paused" && (
+              {moveType === "paused" && !isMUV && (
                 <>
                   <button className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]" onClick={continueAnimation}>
                     <FaPlay className="size-6 sm:size-8 col-start-1" />
@@ -186,7 +248,7 @@ export default function SimFrame( {
                   </button>
                 </>
               )}
-              {moveType === "end" && (
+              {moveType === "end" && !isMUV && (
                 <button className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]" onClick={resetAnimation}>
                   <MdOutlineReplay className="size-6 sm:size-8 col-start-1" />
                   <p className="col-start-2 text-center">Reiniciar Simulação</p>
@@ -194,14 +256,27 @@ export default function SimFrame( {
                 </button>
               )}
 
-              <button className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]" 
-              onClick={() => {
-                void navigate("/");
-              }}>
-                <IoHomeOutline className="size-6 sm:size-8 col-start-1" />
-                <p className="col-start-2 text-center">Voltar ao Menu</p>
-                <div className="size-6 sm:size-8 col-start-3 invisible" />
-              </button>
+              {!isMUV && (
+                <button className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]" 
+                onClick={() => {
+                  void navigate("/");
+                }}>
+                  <IoHomeOutline className="size-6 sm:size-8 col-start-1" />
+                  <p className="col-start-2 text-center">Voltar ao Menu</p>
+                  <div className="size-6 sm:size-8 col-start-3 invisible" />
+                </button>
+              )}
+
+              {/* show speed graph */}
+              {isMUV && (
+                <PositionTimeChart
+                  data={graphData}
+                  maxTime={maxTime}
+                  minDistance={startPosition}
+                  maxDistance={finalPosition}
+                />
+              )}
+
             </div>
 
             <div className="bg-black rounded-xl flex items-center justify-center border-white border-2 text-white items">

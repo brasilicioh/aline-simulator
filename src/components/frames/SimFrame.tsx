@@ -97,7 +97,7 @@ export default function SimFrame( {
               <div className="absolute bottom-0 left-0 right-0 flex justify-between">
                 <p className="text-white bg-blue-800 px-2">Início ({startPosition}m)</p>
                 {isMUV && (
-                  <>
+                  <div className="flex">
                     {moveType === "start" && (
                       <button className="bg-blue-800 text-white flex justify-center p-2 w-10" onClick={startAnimation}>
                         <FaPlay className="size-4 sm:size-4" />
@@ -123,7 +123,13 @@ export default function SimFrame( {
                         <MdOutlineReplay className="size-4 sm:size-4" />
                       </button>
                     )}
-                  </>
+                    <button className="bg-blue-800 text-white flex justify-center p-2 w-10" 
+                    onClick={() => {
+                      void navigate("/");
+                    }}>
+                      <IoHomeOutline className="size-4 sm:size-4 " />
+                    </button>
+                  </div>
                 )}
                 <p className="text-white bg-blue-800 px-2">Fim ({finalPosition}m)</p>
               </div>

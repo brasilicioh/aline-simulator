@@ -15,6 +15,7 @@ type Props = {
   maxTime: number;
   minDistance: number;
   maxDistance: number;
+  width?: number;
 };
 
 export function PositionTimeChart({
@@ -22,9 +23,10 @@ export function PositionTimeChart({
   maxTime,
   minDistance,
   maxDistance,
+  width
 }: Props) {
   return (
-    <LineChart width={400} height={260} data={data}>
+    <LineChart width={width == null?400:width} height={260} data={data}>
       <CartesianGrid strokeDasharray="5 3" />
       <XAxis
         dataKey="time"

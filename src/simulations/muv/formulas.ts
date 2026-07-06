@@ -51,3 +51,14 @@ export function calculateMUVDuration(
 
   return Math.min(...valid);
 }
+
+export function calculateMUVFinalSpeed(
+  initialSpeed: number,
+  acceleration: number,
+  displacement: number,
+) {
+  // solve torriceli
+  return Math.sqrt(
+    initialSpeed ** 2 + 2 * acceleration * displacement,
+  );
+}

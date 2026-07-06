@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
+import { PositionTimeChart } from "@charts/PositionTimeChart";
+import { SpeedTimeChart } from "@charts/SpeedTimeChart";
+
 import aline from "@assets/aline.png";
 import { useAnimation } from "@animation";
 import { renderPosition } from "@muv/../utils";
@@ -9,10 +12,11 @@ import {
   resetMUVAnimation,
   startMUVAnimation,
 } from "@muv/animate";
-import { calculateMUVDuration } from "@muv/formulas";
+import { calculateMUVDuration, calculateMUVFinalSpeed } from "@muv/formulas";
+import { buildMUVGraphData, buildMUVVelocityGraphData } from "@muv/graph";
 
 export function Test() {
-  const [aceleration, setAceleration] = useState<number>(2);
+  const [acceleration, setAcceleration] = useState<number>(2);
   const [speed, setSpeed] = useState<number>(4);
   const [initialPosition, setInitialPosition] = useState<number>(0);
   const [startPosition, setStartPosition] = useState<number>(0);
@@ -27,12 +31,31 @@ export function Test() {
 
   const animation = useAnimation();
   const targetPosition = speed >= 0 ? finalPosition : startPosition;
+  const maxSpeed =
+    calculateMUVFinalSpeed(
+      speed,
+      acceleration,
+      targetPosition - initialPosition,
+    ) | 0;
 
   const duration = calculateMUVDuration(
     initialPosition,
     targetPosition,
     speed,
-    aceleration,
+    acceleration,
+  );
+
+  const positionGraphData = buildMUVGraphData(
+    initialPosition,
+    speed,
+    acceleration,
+    timePassing,
+  );
+
+  const velocityGraphData = buildMUVVelocityGraphData(
+    speed,
+    acceleration,
+    timePassing,
   );
 
   const renderAnimatedPosition = (position: number) => {
@@ -58,7 +81,7 @@ export function Test() {
       duration,
       initialPosition,
       initialSpeed: speed,
-      acceleration: aceleration,
+      acceleration: acceleration,
       targetPosition,
       startPosition,
       finalPosition,
@@ -89,7 +112,7 @@ export function Test() {
       duration,
       initialPosition,
       initialSpeed: speed,
-      acceleration: aceleration,
+      acceleration: acceleration,
       targetPosition,
       startPosition,
       finalPosition,
@@ -133,9 +156,9 @@ export function Test() {
       <p>Aceleração</p>
       <input
         type="number"
-        value={aceleration}
+        value={acceleration}
         onChange={(e) => {
-          setAceleration(Number(e.target.value));
+          setAcceleration(Number(e.target.value));
         }}
       />
 
@@ -216,6 +239,24 @@ export function Test() {
       </div>
 
       <p>Tempo passado: {timePassing.toFixed(3)}s</p>
+
+      <div className="bg-black">
+        <PositionTimeChart
+          data={positionGraphData}
+          maxTime={Math.max(duration, timePassing)}
+          minDistance={startPosition}
+          maxDistance={finalPosition}
+        />
+      </div>
+
+      <div className="bg-black">
+        <SpeedTimeChart
+          data={velocityGraphData}
+          maxTime={Math.max(duration, timePassing)}
+          minSpeed={speed}
+          maxSpeed={maxSpeed}
+        />
+      </div>
     </>
   );
 }

@@ -33,7 +33,13 @@ export function SliderControl({
         <span className="text-xs">{label}</span>
 
         <div className="bg-zinc-700 rounded px-2 py-1 text-xs min-w-12 text-center">
-          {value}
+          <input
+            type="number"
+            value={value}
+            onChange={(e) => {
+              onChange(Number(e.target.value));
+            }}
+          />
         </div>
       </div>
     </div>

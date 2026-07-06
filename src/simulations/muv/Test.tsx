@@ -2,14 +2,14 @@ import { useEffect, useRef, useState } from "react";
 
 import aline from "@assets/aline.png";
 import { useAnimation } from "@animation";
-import { renderPosition } from "@mru/../utils";
-import type { MoveStatus } from "@mru/../types";
+import { renderPosition } from "@muv/../utils";
+import type { MoveStatus } from "@muv/../types";
 import {
   pauseMUVAnimation,
   resetMUVAnimation,
   startMUVAnimation,
-} from "./animate";
-import { calculateMUVDuration } from "./formulas";
+} from "@muv/animate";
+import { calculateMUVDuration } from "@muv/formulas";
 
 export function Test() {
   const [aceleration, setAceleration] = useState<number>(2);
@@ -126,12 +126,6 @@ export function Test() {
     });
   }, [moveType, initialPosition, startPosition, finalPosition]);
 
-  useEffect(() => {
-    return () => {
-      animation.reset();
-    };
-  }, [animation]);
-
   return (
     <>
       <h1>MUV</h1>
@@ -222,10 +216,6 @@ export function Test() {
       </div>
 
       <p>Tempo passado: {timePassing.toFixed(3)}s</p>
-      <p>
-        Duração estimada:{" "}
-        {Number.isFinite(duration) ? duration.toFixed(3) : "inválida"}s
-      </p>
     </>
   );
 }

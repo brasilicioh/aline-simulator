@@ -23,9 +23,9 @@ export function SliderControl({
         max={max}
         step={step}
         value={value}
-        onChange={(e) =>
-          onChange(Number(e.target.value))
-        }
+        onChange={(e) => {
+          onChange(Number(e.target.value));
+        }}
         className="w-full"
       />
 

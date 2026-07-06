@@ -71,6 +71,8 @@ export default function SimFrame({
   const totalDistance = finalPosition - startPosition;
   const zoom = 300 / (1 + Math.log10(totalDistance + 8));
 
+  const disabledInputs: boolean = moveType !== "start";
+
   return (
     <div className="w-full h-screen max-h-screen bg-[#0D1117] overflow-x-hidden">
       <div className="grid grid-cols-1 grid-rows-10 h-full">
@@ -117,6 +119,7 @@ export default function SimFrame({
                 min={0}
                 max={100}
                 step={5}
+                disabled={disabledInputs}
               />
 
               <hr />
@@ -128,6 +131,7 @@ export default function SimFrame({
                 min={-50}
                 max={50}
                 step={5}
+                disabled={disabledInputs}
               />
 
               <hr />
@@ -139,6 +143,7 @@ export default function SimFrame({
                 min={-50}
                 max={0}
                 step={5}
+                disabled={disabledInputs}
               />
 
               <hr />
@@ -150,6 +155,7 @@ export default function SimFrame({
                 min={0}
                 max={50}
                 step={5}
+                disabled={disabledInputs}
               />
             </div>
 
@@ -185,6 +191,7 @@ export default function SimFrame({
                 </button>
               )}
               {moveType === "paused" && (
+                // TODO: DEIXAR BOTÕES UM DO LADO DO OUTRO
                 <>
                   <button
                     className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]"
@@ -222,6 +229,7 @@ export default function SimFrame({
               <button
                 className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]"
                 onClick={() => {
+                  resetAnimation();
                   void navigate("/");
                 }}
               >

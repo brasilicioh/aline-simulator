@@ -154,7 +154,7 @@ export default function SimFrame( {
                     label={isMUV?"Velocidade Inicial (m/s)":"Velocidade (m/s)"}
                     value={speed}
                     onChange={setSpeed}
-                    min={0}
+                    min={-100}
                     max={100}
                     step={5}
                     disabled={disabledInputs}
@@ -175,7 +175,7 @@ export default function SimFrame( {
                   label={isMUV?"Velocidade Inicial (m/s)":"Velocidade (m/s)"}
                   value={speed}
                   onChange={setSpeed}
-                  min={0}
+                  min={-100}
                   max={100}
                   step={5}
                   disabled={disabledInputs}

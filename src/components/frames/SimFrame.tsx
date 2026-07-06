@@ -76,6 +76,7 @@ export default function SimFrame( {
   const navigate = useNavigate();
   const totalDistance = finalPosition - startPosition;
   const zoom = 300 / (1 + Math.log10(totalDistance + 8));
+  const disabledInputs: boolean = moveType !== "start";
 
   return (
     <div className="w-full h-screen max-h-screen bg-[#0D1117] overflow-x-hidden">
@@ -139,7 +140,7 @@ export default function SimFrame( {
 
         <div className="row-span-5 flex justify-center">
           <div className="grid grid-cols-3 gap-1 h-full w-[95%] py-1">
-            <div className="bg-black border-2 border-white rounded-xl p-2 text-white flex flex-col gap-2 w-full max-w-sm">
+            <div className="bg-black border-2 border-white rounded-xl p-2 text-white flex flex-col gap-2 w-full">
               
               <div className="text-center">
                 <h2 className="font-semibold text-sm">
@@ -156,6 +157,7 @@ export default function SimFrame( {
                     min={0}
                     max={100}
                     step={5}
+                    disabled={disabledInputs}
                   />
                   
                   <SliderControl
@@ -165,6 +167,7 @@ export default function SimFrame( {
                     min={-10}
                     max={10}
                     step={1}
+                    disabled={disabledInputs}
                   />
                 </div>
               ):(
@@ -175,6 +178,7 @@ export default function SimFrame( {
                   min={0}
                   max={100}
                   step={5}
+                  disabled={disabledInputs}
                 />
               )}
 
@@ -187,6 +191,7 @@ export default function SimFrame( {
                 min={-50}
                 max={50}
                 step={5}
+                disabled={disabledInputs}
               />
 
               <hr />
@@ -198,6 +203,7 @@ export default function SimFrame( {
                 min={-50}
                 max={0}
                 step={5}
+                disabled={disabledInputs}
               />
 
               <hr />
@@ -209,6 +215,7 @@ export default function SimFrame( {
                 min={0}
                 max={50}
                 step={5}
+                disabled={disabledInputs}
               />
             </div>
             
@@ -241,18 +248,18 @@ export default function SimFrame( {
                 </button>
               )}
               {moveType === "paused" && !isMUV && (
-                <>
-                  <button className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]" onClick={continueAnimation}>
+                <div className="grid grid-cols-2 gap-3 w-[80%]">
+                  <button className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl" onClick={continueAnimation}>
                     <FaPlay className="size-6 sm:size-8 col-start-1" />
                     <p className="col-start-2 text-center">Continuar Simulação</p>
-                    <div className="size-6 sm:size-8 col-start-3 invisible" />
+                    
                   </button>
-                  <button className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]" onClick={resetAnimation}>
+                  <button className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl" onClick={resetAnimation}>
                     <MdOutlineReplay className="size-6 sm:size-8 col-start-1" />
                     <p className="col-start-2 text-center">Reiniciar Simulação</p>
-                    <div className="size-6 sm:size-8 col-start-3 invisible" />
+                    
                   </button>
-                </>
+                </div>
               )}
               {moveType === "end" && !isMUV && (
                 <button className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]" onClick={resetAnimation}>

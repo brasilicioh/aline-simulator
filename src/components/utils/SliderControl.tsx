@@ -22,7 +22,8 @@ export function SliderControl({
     <div title={disabled ? "Volte a animação para editar valores" : undefined}>
       <div
         className={
-          "grid grid-rows-[auto_auto] gap-1" + (disabled ? " pointer-events-none" : "")
+          "grid grid-rows-[auto_auto] gap-1" +
+          (disabled ? " pointer-events-none" : "")
         }
       >
         <input

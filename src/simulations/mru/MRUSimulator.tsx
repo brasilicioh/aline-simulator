@@ -50,10 +50,6 @@ export function MRUSimulator() {
   // constante que guarda as funções de movimento
   const animation = useAnimation();
 
-  // booleano que delimita se os inputs podem ser alterados
-  // TODO: não permitir alterar inputs em pause
-  const isMoving = moveType === "moving";
-
   // função utilitária de renderização
   const renderAnimatedPosition = (position: number) => {
     renderPosition({

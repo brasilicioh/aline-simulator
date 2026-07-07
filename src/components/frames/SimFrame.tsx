@@ -11,7 +11,6 @@ import { IoHomeOutline } from "react-icons/io5";
 import { FaPause } from "react-icons/fa";
 import type { RefObject } from "react";
 
-
 interface SimProps {
   //common data from the prop drilling
   speed: number;
@@ -25,18 +24,18 @@ interface SimProps {
 
   initialPosition: number;
   setInitialPosition: (initialPosition: number) => void;
-  
+
   finalPosition: number;
   setFinalPosition: (finalPosition: number) => void;
 
   timePassing: number;
   setTimePassing?: (timePassing: number) => void;
 
-  moveType: String;
+  moveType: string;
 
   //referencepoints to animate the image and div
-  screenRef: RefObject<HTMLDivElement>;
-  imageRef: RefObject<HTMLImageElement>;
+  screenRef: RefObject<HTMLDivElement | null>;
+  imageRef: RefObject<HTMLImageElement | null>;
 
   //animation section
   startAnimation?: () => void;
@@ -84,16 +83,19 @@ export default function SimFrame( {
   const zoom = 300 / (1 + Math.log10(totalDistance + 8));
   const disabledInputs: boolean = moveType !== "start";
 
+  const disabledInputs: boolean = moveType !== "start";
+
   return (
     <div className="w-full h-screen max-h-screen bg-[#0D1117] overflow-x-hidden">
-
       <div className="grid grid-cols-1 grid-rows-10 h-full">
         <div className="row-span-5 flex flex-col justify-center items-center">
           <div className="h-[90%] w-[95%] border-black border-4 border-bs-gray-600 border-s-gray-600 flex items-center justify-center relative">
             {/* <h3 className="text-white bg-blue-800 size-full">AlineSim$~ Connection Terminated ▋</h3> */}
-            <div ref={screenRef} className="bg-[url('@assets/landscape.jpeg')] bg-cover bg-center size-full bg-repeat-x"
+            <div
+              ref={screenRef}
+              className="bg-[url('@assets/landscape.jpeg')] bg-cover bg-center size-full bg-repeat-x"
               style={{
-                backgroundSize: `${zoom}%`
+                backgroundSize: `${zoom.toString()}%`,
               }}
             >
               <img
@@ -225,7 +227,6 @@ export default function SimFrame( {
                 disabled={disabledInputs}
               />
             </div>
-            
 
             <div className="bg-black flex flex-col rounded-xl justify-center gap-3 items-center border-white border-2 text-white">
               {/* <button className="bg-blue-900 p-2 sm:p-3 rounded-4xl">
@@ -269,7 +270,10 @@ export default function SimFrame( {
                 </div>
               )}
               {moveType === "end" && !isMUV && (
-                <button className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]" onClick={resetAnimation}>
+                <button
+                  className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]"
+                  onClick={resetAnimation}
+                >
                   <MdOutlineReplay className="size-6 sm:size-8 col-start-1" />
                   <p className="col-start-2 text-center">Reiniciar Simulação</p>
                   <div className="size-6 sm:size-8 col-start-3 invisible" />
@@ -309,7 +313,6 @@ export default function SimFrame( {
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );

@@ -12,7 +12,6 @@ import {
 import { calculateMUVDuration, calculateMUVFinalSpeed } from "@muv/formulas";
 import { buildMUVGraphData, buildMUVVelocityGraphData } from "@muv/graph";
 
-
 export function MUVSimulator() {
   const [acceleration, setAcceleration] = useState<number>(0);
   const [speed, setSpeed] = useState<number>(10);
@@ -150,25 +149,32 @@ export function MUVSimulator() {
   return (
     <>
       <SimFrame
-        speed={speed} setSpeed={setSpeed}
-        acceleration={acceleration} setAcceleration={setAcceleration}
-        startPosition={startPosition} setStartPosition={setStartPosition}
-        initialPosition={initialPosition} setInitialPosition={setInitialPosition}
-        finalPosition={finalPosition} setFinalPosition={setFinalPosition}
-        timePassing={timePassing} setTimePassing={setTimePassing}
+        speed={speed}
+        setSpeed={setSpeed}
+        acceleration={acceleration}
+        setAcceleration={setAcceleration}
+        startPosition={startPosition}
+        setStartPosition={setStartPosition}
+        initialPosition={initialPosition}
+        setInitialPosition={setInitialPosition}
+        finalPosition={finalPosition}
+        setFinalPosition={setFinalPosition}
+        timePassing={timePassing}
+        setTimePassing={setTimePassing}
         moveType={moveType}
-
-        screenRef={screenRef} imageRef={imageRef}
-
-        startAnimation={startAnimation} pauseAnimation={pauseAnimation}
-        continueAnimation={continueAnimation} resetAnimation={resetAnimation}
-
-        graphData={positionGraphData} velocityGraphData={velocityGraphData}
-        
-        maxSpeed={maxSpeed} minSpeed={speed} duration={duration}
+        screenRef={screenRef}
+        imageRef={imageRef}
+        startAnimation={startAnimation}
+        pauseAnimation={pauseAnimation}
+        continueAnimation={continueAnimation}
+        resetAnimation={resetAnimation}
+        graphData={positionGraphData}
+        velocityGraphData={velocityGraphData}
+        maxSpeed={maxSpeed}
+        minSpeed={speed}
+        duration={duration}
         isMUV={true}
       />
     </>
   );
 }
-

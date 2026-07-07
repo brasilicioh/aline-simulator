@@ -58,7 +58,5 @@ export function calculateMUVFinalSpeed(
   displacement: number,
 ) {
   // solve torriceli
-  return Math.sqrt(
-    initialSpeed ** 2 + 2 * acceleration * displacement,
-  );
+  return Math.sqrt(initialSpeed ** 2 + 2 * acceleration * displacement);
 }

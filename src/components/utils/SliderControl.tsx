@@ -50,10 +50,7 @@ export function SliderControl({
               onChange={(e) => {
                 const raw = Number(e.target.value);
 
-                const newValue = Math.min(
-                  max,
-                  Math.max(min, raw)
-                );
+                const newValue = Math.min(max, Math.max(min, raw));
                 onChange(newValue);
               }}
               className="px-2 py-1 rounded w-20"

@@ -147,21 +147,28 @@ export function MRUSimulator() {
   return (
     <>
       <SimFrame
-      speed={speed} setSpeed={setSpeed}
-      acceleration={0} setAcceleration={setSpeed}
-      startPosition={startPosition} setStartPosition={setStartPosition}
-      initialPosition={initialPosition} setInitialPosition={setInitialPosition}
-      finalPosition={finalPosition} setFinalPosition={setFinalPosition}
-      timePassing={timePassing} setTimePassing={setTimePassing}
-      moveType={moveType}
-
-      screenRef={screenRef} imageRef={imageRef}
-      
-      startAnimation={startAnimation} pauseAnimation={pauseAnimation}
-      continueAnimation={continueAnimation} resetAnimation={resetAnimation}
-
-      graphData={graphData} maxTime={duration}
-      isMUV={false}
+        speed={speed}
+        setSpeed={setSpeed}
+        acceleration={0}
+        setAcceleration={setSpeed}
+        startPosition={startPosition}
+        setStartPosition={setStartPosition}
+        initialPosition={initialPosition}
+        setInitialPosition={setInitialPosition}
+        finalPosition={finalPosition}
+        setFinalPosition={setFinalPosition}
+        timePassing={timePassing}
+        setTimePassing={setTimePassing}
+        moveType={moveType}
+        screenRef={screenRef}
+        imageRef={imageRef}
+        startAnimation={startAnimation}
+        pauseAnimation={pauseAnimation}
+        continueAnimation={continueAnimation}
+        resetAnimation={resetAnimation}
+        graphData={graphData}
+        duration={duration}
+        isMUV={false}
       />
     </>
   );

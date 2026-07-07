@@ -1,4 +1,5 @@
 import { PositionTimeChart } from "@charts/PositionTimeChart";
+import { SpeedTimeChart } from "@charts/SpeedTimeChart";
 import { useNavigate } from "react-router-dom";
 import aline from "@assets/aline.png";
 
@@ -47,8 +48,12 @@ interface SimProps {
   resetAnimation?: () => void;
 
   //plott
-  graphData: {time: number, space: number}[]; 
-  maxTime: number;
+  graphData: {time: number, space: number}[];
+  velocityGraphData?: {time: number, speed: number}[]; 
+
+  duration: number;
+  maxSpeed?: number;
+  minSpeed?: number;
 
   // frame settings
   isMUV?: boolean;
@@ -68,7 +73,8 @@ export default function SimFrame( {
 
   startAnimation, pauseAnimation, continueAnimation, resetAnimation,
 
-  graphData, maxTime,
+  graphData, velocityGraphData, 
+  maxSpeed, minSpeed, duration,
 
   isMUV
 
@@ -134,6 +140,7 @@ export default function SimFrame( {
                 )}
                 <p className="text-white bg-blue-800 px-2">Fim ({finalPosition}m)</p>
               </div>
+              <p className="absolute -translate-x-1/2 left-1/2 bg-blue-800 text-white">Tempo passado: {timePassing.toFixed(3)}</p>
             </div>
           </div>
         </div>
@@ -282,11 +289,11 @@ export default function SimFrame( {
 
               {/* show speed graph */}
               {isMUV && (
-                <PositionTimeChart
-                  data={graphData}
-                  maxTime={maxTime}
-                  minDistance={startPosition}
-                  maxDistance={finalPosition}
+                <SpeedTimeChart
+                  data={velocityGraphData}
+                  maxTime={Math.max(duration, timePassing)}
+                  maxSpeed={maxSpeed}
+                  minSpeed={minSpeed}
                 />
               )}
 
@@ -295,7 +302,7 @@ export default function SimFrame( {
             <div className="bg-black rounded-xl flex items-center justify-center border-white border-2 text-white items">
               <PositionTimeChart
                 data={graphData}
-                maxTime={maxTime}
+                maxTime={Math.max(duration, timePassing)}
                 minDistance={startPosition}
                 maxDistance={finalPosition}
               />

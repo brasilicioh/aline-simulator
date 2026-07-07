@@ -1,58 +1,151 @@
 import { useEffect, useRef, useState } from "react";
+import SimFrame from "../../components/frames/SimFrame";
 
 import { useAnimation } from "@animation";
-
-import { buildMRUGraphData } from "@mru/graph";
-import { calculateMRUDuration } from "@mru/formulas";
+import { renderPosition } from "@muv/../utils";
+import type { MoveStatus } from "@muv/../types";
 import {
-  startMRUAnimation,
-  pauseMRUAnimation,
-  resetMRUAnimation,
-} from "@mru/animate";
+  pauseMUVAnimation,
+  resetMUVAnimation,
+  startMUVAnimation,
+} from "@muv/animate";
+import { calculateMUVDuration, calculateMUVFinalSpeed } from "@muv/formulas";
+import { buildMUVGraphData, buildMUVVelocityGraphData } from "@muv/graph";
 
-import type { MoveStatus } from "@mru/../types";
-import SimFrame from "../../components/frames/SimFrame";
-import { renderPosition, verifyValues } from "@mru/../utils";
 
 export function MUVSimulator() {
-  const [moveType, setMoveType] = useState<MoveStatus>("start");
-  
-  // estados obtidos via entrada
-  const [speed, setSpeed] = useState<number>(1);
   const [acceleration, setAcceleration] = useState<number>(0);
-  const [startPosition, setStartPosition] = useState<number>(0);
-  const [finalPosition, setFinalPosition] = useState<number>(10);
+  const [speed, setSpeed] = useState<number>(10);
   const [initialPosition, setInitialPosition] = useState<number>(0);
-  
-  // estado que guarda quanto tempo de animação se passou
+  const [startPosition, setStartPosition] = useState<number>(-50);
+  const [finalPosition, setFinalPosition] = useState<number>(50);
+
+  const [moveType, setMoveType] = useState<MoveStatus>("start");
   const [timePassing, setTimePassing] = useState<number>(0);
-  
-  // constantes usadas em cálculo, respectivamente:
-  // posição final "alvo"; distância a ser percorrida; a duração nesse perccurso
-  const targetPosition = speed > 0 ? finalPosition : startPosition;
-  const distanceToTravel = Math.abs(targetPosition - initialPosition);
-  const duration = calculateMRUDuration(speed, distanceToTravel);
-  
-  // dados que montam o gráfico
-  const graphData = buildMRUGraphData(
-    speed,
-    initialPosition,
-    targetPosition,
-    timePassing,
-  );
-  
-  // referências usadas para, respectivamente:
-  // informações do corpo; delimitação da "pista de movimento"; progresso (0-1) de movimentação até o fim
+
   const imageRef = useRef<HTMLImageElement>(null);
   const screenRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef(0);
-  
-  // constante que guarda as funções de movimento
+
   const animation = useAnimation();
-  
-  // booleano que delimita se os inputs podem ser alterados
-  // TODO: não permitir alterar inputs em pause
-  const isMoving = moveType === "moving";
+  const targetPosition = speed >= 0 ? finalPosition : startPosition;
+  const maxSpeed =
+    calculateMUVFinalSpeed(
+      speed,
+      acceleration,
+      targetPosition - initialPosition,
+    ) | 0;
+
+  const duration = calculateMUVDuration(
+    initialPosition,
+    targetPosition,
+    speed,
+    acceleration,
+  );
+
+  const positionGraphData = buildMUVGraphData(
+    initialPosition,
+    speed,
+    acceleration,
+    timePassing,
+  );
+
+  const velocityGraphData = buildMUVVelocityGraphData(
+    speed,
+    acceleration,
+    timePassing,
+  );
+
+  const renderAnimatedPosition = (position: number) => {
+    renderPosition({
+      image: imageRef.current,
+      positionInMeters: position,
+      startPosition,
+      finalPosition,
+      trackWidth: screenRef.current?.clientWidth ?? 0,
+    });
+  };
+
+  const startAnimation = () => {
+    if (!Number.isFinite(duration) || duration <= 0) {
+      alert("Não foi possível iniciar com os valores atuais.");
+      return;
+    }
+
+    setMoveType("moving");
+
+    startMUVAnimation({
+      animation,
+      duration,
+      initialPosition,
+      initialSpeed: speed,
+      acceleration: acceleration,
+      targetPosition,
+      startPosition,
+      finalPosition,
+      progressRef,
+      setTimePassing,
+      onPositionChange: renderAnimatedPosition,
+      onFinish() {
+        setMoveType("end");
+      },
+    });
+  };
+
+  const pauseAnimation = () => {
+    pauseMUVAnimation(animation);
+    setMoveType("paused");
+  };
+
+  const continueAnimation = () => {
+    if (!Number.isFinite(duration) || duration <= 0) {
+      alert("Não foi possível continuar com os valores atuais.");
+      return;
+    }
+
+    setMoveType("moving");
+
+    startMUVAnimation({
+      animation,
+      duration,
+      initialPosition,
+      initialSpeed: speed,
+      acceleration: acceleration,
+      targetPosition,
+      startPosition,
+      finalPosition,
+      initialProgress: progressRef.current,
+      progressRef,
+      setTimePassing,
+      onPositionChange: renderAnimatedPosition,
+      onFinish() {
+        setMoveType("end");
+      },
+    });
+  };
+
+  const resetAnimation = () => {
+    resetMUVAnimation({
+      animation,
+      progressRef,
+      setTimePassing,
+      onResetPosition() {
+        renderAnimatedPosition(initialPosition);
+      },
+    });
+    setMoveType("start");
+  };
+
+  useEffect(() => {
+    if (moveType !== "start") return;
+    renderPosition({
+      image: imageRef.current,
+      positionInMeters: initialPosition,
+      startPosition,
+      finalPosition,
+      trackWidth: screenRef.current?.clientWidth ?? 0,
+    });
+  }, [moveType, initialPosition, startPosition, finalPosition]);
 
   return (
     <>
@@ -67,10 +160,12 @@ export function MUVSimulator() {
 
         screenRef={screenRef} imageRef={imageRef}
 
-        //startAnimation={startAnimation} pauseAnimation={pauseAnimation}
-        //continueAnimation={continueAnimation} resetAnimation={resetAnimation}
+        startAnimation={startAnimation} pauseAnimation={pauseAnimation}
+        continueAnimation={continueAnimation} resetAnimation={resetAnimation}
 
-        graphData={graphData} maxTime={duration}
+        graphData={positionGraphData} velocityGraphData={velocityGraphData}
+        
+        maxSpeed={maxSpeed} minSpeed={speed} duration={duration}
         isMUV={true}
       />
     </>

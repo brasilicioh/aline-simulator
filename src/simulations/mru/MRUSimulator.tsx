@@ -149,6 +149,8 @@ export function MRUSimulator() {
       <SimFrame
         speed={speed}
         setSpeed={setSpeed}
+        acceleration={0}
+        setAcceleration={setSpeed}
         startPosition={startPosition}
         setStartPosition={setStartPosition}
         initialPosition={initialPosition}
@@ -165,7 +167,8 @@ export function MRUSimulator() {
         continueAnimation={continueAnimation}
         resetAnimation={resetAnimation}
         graphData={graphData}
-        maxTime={duration}
+        duration={duration}
+        isMUV={false}
       />
     </>
   );

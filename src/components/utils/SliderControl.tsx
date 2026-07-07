@@ -41,13 +41,19 @@ export function SliderControl({
         <div className="grid grid-cols-[1fr_auto] items-center">
           <span className="text-xs">{label}</span>
 
-          <div className="bg-zinc-700 rounded px-2 py-1 text-xs min-w-12 text-center">
+          <div className="bg-zinc-700 rounded text-xs w-20 text-center">
             <input
               type="number"
               value={value}
+              min={min}
+              max={max}
               onChange={(e) => {
-                onChange(Number(e.target.value));
+                const raw = Number(e.target.value);
+
+                const newValue = Math.min(max, Math.max(min, raw));
+                onChange(newValue);
               }}
+              className="px-2 py-1 rounded w-20"
             />
           </div>
         </div>

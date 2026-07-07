@@ -1,4 +1,5 @@
 import { PositionTimeChart } from "@charts/PositionTimeChart";
+import { SpeedTimeChart } from "@charts/SpeedTimeChart";
 import { useNavigate } from "react-router-dom";
 import aline from "@assets/aline.png";
 
@@ -14,6 +15,9 @@ interface SimProps {
   //common data from the prop drilling
   speed: number;
   setSpeed: (speed: number) => void;
+
+  acceleration: number;
+  setAcceleration: (acceleration: number) => void;
 
   startPosition: number;
   setStartPosition: (startPosition: number) => void;
@@ -34,22 +38,31 @@ interface SimProps {
   imageRef: RefObject<HTMLImageElement | null>;
 
   //animation section
-  startAnimation: () => void;
+  startAnimation?: () => void;
 
-  pauseAnimation: () => void;
+  pauseAnimation?: () => void;
 
-  continueAnimation: () => void;
+  continueAnimation?: () => void;
 
-  resetAnimation: () => void;
+  resetAnimation?: () => void;
 
   //plott
   graphData: { time: number; space: number }[];
-  maxTime: number;
+  velocityGraphData?: { time: number; speed: number }[] | undefined;
+
+  duration: number;
+  maxSpeed?: number | undefined;
+  minSpeed?: number | undefined;
+
+  // frame settings
+  isMUV?: boolean;
 }
 
 export default function SimFrame({
   speed,
   setSpeed,
+  acceleration,
+  setAcceleration,
   startPosition,
   setStartPosition,
   initialPosition,
@@ -58,19 +71,26 @@ export default function SimFrame({
   setFinalPosition,
   timePassing,
   moveType,
+
   screenRef,
   imageRef,
+
   startAnimation,
   pauseAnimation,
   continueAnimation,
   resetAnimation,
+
   graphData,
-  maxTime,
+  velocityGraphData,
+  maxSpeed,
+  minSpeed,
+  duration,
+
+  isMUV,
 }: SimProps) {
   const navigate = useNavigate();
   const totalDistance = finalPosition - startPosition;
   const zoom = 300 / (1 + Math.log10(totalDistance + 8));
-
   const disabledInputs: boolean = moveType !== "start";
 
   return (
@@ -95,32 +115,111 @@ export default function SimFrame({
                 <p className="text-white bg-blue-800 px-2">
                   Início ({startPosition}m)
                 </p>
+                {isMUV && (
+                  <div className="flex">
+                    {moveType === "start" && (
+                      <button
+                        className="bg-blue-800 text-white flex justify-center p-2 w-10"
+                        onClick={startAnimation}
+                      >
+                        <FaPlay className="size-4 sm:size-4" />
+                      </button>
+                    )}
+                    {moveType === "moving" && (
+                      <button
+                        className="bg-blue-800 text-white flex justify-center p-2 w-10"
+                        onClick={pauseAnimation}
+                      >
+                        <FaPause className="size-4 sm:size-4" />
+                      </button>
+                    )}
+                    {moveType === "paused" && (
+                      <>
+                        <button
+                          className="bg-blue-800 text-white flex justify-center p-2 w-10"
+                          onClick={continueAnimation}
+                        >
+                          <FaPlay className="size-4 sm:size-4" />
+                        </button>
+                        <button
+                          className="bg-blue-800 text-white flex justify-center p-2 w-10"
+                          onClick={resetAnimation}
+                        >
+                          <MdOutlineReplay className="size-4 sm:size-4" />
+                        </button>
+                      </>
+                    )}
+                    {moveType === "end" && (
+                      <button
+                        className="bg-blue-800 text-white flex justify-center p-2 w-10"
+                        onClick={resetAnimation}
+                      >
+                        <MdOutlineReplay className="size-4 sm:size-4" />
+                      </button>
+                    )}
+                    <button
+                      className="bg-blue-800 text-white flex justify-center p-2 w-10"
+                      onClick={() => {
+                        void navigate("/");
+                      }}
+                    >
+                      <IoHomeOutline className="size-4 sm:size-4 " />
+                    </button>
+                  </div>
+                )}
                 <p className="text-white bg-blue-800 px-2">
                   Fim ({finalPosition}m)
                 </p>
               </div>
+              <p className="absolute -translate-x-1/2 left-1/2 bg-blue-800 text-white">
+                Tempo passado: {timePassing.toFixed(3)}
+              </p>
             </div>
           </div>
         </div>
 
         <div className="row-span-5 flex justify-center">
           <div className="grid grid-cols-3 gap-1 h-full w-[95%] py-1">
-            <div className="bg-black border-2 border-white rounded-xl p-2 text-white flex flex-col gap-2 w-full max-w-sm">
+            <div className="bg-black border-2 border-white rounded-xl p-2 text-white flex flex-col gap-2 w-full">
               <div className="text-center">
                 <h2 className="font-semibold text-sm">
                   Partícula Aline - Configurações
                 </h2>
               </div>
 
-              <SliderControl
-                label="Velocidade (m/s)"
-                value={speed}
-                onChange={setSpeed}
-                min={0}
-                max={100}
-                step={5}
-                disabled={disabledInputs}
-              />
+              {isMUV ? (
+                <div className="grid grid-cols-2 gap-3">
+                  <SliderControl
+                    label={"Velocidade Inicial (m/s)"}
+                    value={speed}
+                    onChange={setSpeed}
+                    min={-100}
+                    max={100}
+                    step={5}
+                    disabled={disabledInputs}
+                  />
+
+                  <SliderControl
+                    label="Aceleração (m/s²)"
+                    value={acceleration}
+                    onChange={setAcceleration}
+                    min={-10}
+                    max={10}
+                    step={1}
+                    disabled={disabledInputs}
+                  />
+                </div>
+              ) : (
+                <SliderControl
+                  label={"Velocidade (m/s)"}
+                  value={speed}
+                  onChange={setSpeed}
+                  min={-100}
+                  max={100}
+                  step={5}
+                  disabled={disabledInputs}
+                />
+              )}
 
               <hr />
 
@@ -169,8 +268,8 @@ export default function SimFrame({
               <button className="bg-blue-900 p-2 sm:p-3 rounded-4xl">
                 <RxExit className="size-6 sm:size-8"/>
               </button> */}
-              <p>Tempo passado: {timePassing.toFixed(3)}</p>
-              {moveType === "start" && (
+              {!isMUV && <p>Tempo passado: {timePassing.toFixed(3)}</p>}
+              {moveType === "start" && !isMUV && (
                 <button
                   className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]"
                   onClick={startAnimation}
@@ -180,7 +279,7 @@ export default function SimFrame({
                   <div className="size-6 sm:size-8 col-start-3 invisible" />
                 </button>
               )}
-              {moveType === "moving" && (
+              {moveType === "moving" && !isMUV && (
                 <button
                   className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]"
                   onClick={pauseAnimation}
@@ -190,32 +289,29 @@ export default function SimFrame({
                   <div className="size-6 sm:size-8 col-start-3 invisible" />
                 </button>
               )}
-              {moveType === "paused" && (
-                // TODO: DEIXAR BOTÕES UM DO LADO DO OUTRO
-                <>
+              {moveType === "paused" && !isMUV && (
+                <div className="grid grid-cols-2 gap-3 w-[80%]">
                   <button
-                    className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]"
+                    className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl"
                     onClick={continueAnimation}
                   >
                     <FaPlay className="size-6 sm:size-8 col-start-1" />
                     <p className="col-start-2 text-center">
                       Continuar Simulação
                     </p>
-                    <div className="size-6 sm:size-8 col-start-3 invisible" />
                   </button>
                   <button
-                    className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]"
+                    className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl"
                     onClick={resetAnimation}
                   >
                     <MdOutlineReplay className="size-6 sm:size-8 col-start-1" />
                     <p className="col-start-2 text-center">
                       Reiniciar Simulação
                     </p>
-                    <div className="size-6 sm:size-8 col-start-3 invisible" />
                   </button>
-                </>
+                </div>
               )}
-              {moveType === "end" && (
+              {moveType === "end" && !isMUV && (
                 <button
                   className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]"
                   onClick={resetAnimation}
@@ -226,23 +322,34 @@ export default function SimFrame({
                 </button>
               )}
 
-              <button
-                className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]"
-                onClick={() => {
-                  resetAnimation();
-                  void navigate("/");
-                }}
-              >
-                <IoHomeOutline className="size-6 sm:size-8 col-start-1" />
-                <p className="col-start-2 text-center">Voltar ao Menu</p>
-                <div className="size-6 sm:size-8 col-start-3 invisible" />
-              </button>
+              {!isMUV && (
+                <button
+                  className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]"
+                  onClick={() => {
+                    void navigate("/");
+                  }}
+                >
+                  <IoHomeOutline className="size-6 sm:size-8 col-start-1" />
+                  <p className="col-start-2 text-center">Voltar ao Menu</p>
+                  <div className="size-6 sm:size-8 col-start-3 invisible" />
+                </button>
+              )}
+
+              {/* show speed graph */}
+              {isMUV && (
+                <SpeedTimeChart
+                  data={velocityGraphData || [{ time: 0, speed: 0 }]}
+                  maxTime={Math.max(duration, timePassing)}
+                  maxSpeed={maxSpeed || 0}
+                  minSpeed={minSpeed || 0}
+                />
+              )}
             </div>
 
             <div className="bg-black rounded-xl flex items-center justify-center border-white border-2 text-white items">
               <PositionTimeChart
                 data={graphData}
-                maxTime={maxTime}
+                maxTime={Math.max(duration, timePassing)}
                 minDistance={startPosition}
                 maxDistance={finalPosition}
               />

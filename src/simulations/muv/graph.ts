@@ -21,7 +21,7 @@ export function buildMUVGraphData(
 
   if (clampedElapsed === 0) return data;
 
-  for (let i = 1; i <= SEGMENTS; i++) {
+  for (let i = 1; i < SEGMENTS; i++) {
     const time = (clampedElapsed * i) / SEGMENTS;
     const position = calculateMUVPosition(
       initialPosition,
@@ -51,12 +51,13 @@ export function buildMUVVelocityGraphData(
 
   if (clampedElapsed === 0) return data;
 
-  for (let i = 1; i <= SEGMENTS; i++) {
+  for (let i = 1; i < SEGMENTS; i++) {
     const time = (clampedElapsed * i) / SEGMENTS;
+    const speed = calculateMUVSpeed(initialSpeed, acceleration, time);
 
     data.push({
       time,
-      speed: calculateMUVSpeed(initialSpeed, acceleration, time),
+      speed: Math.round(speed * 1000) / 1000,
     });
   }
 

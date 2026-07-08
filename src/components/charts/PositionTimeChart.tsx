@@ -26,6 +26,9 @@ export function PositionTimeChart({
   maxDistance,
   width,
 }: Props) {
+  maxTime = Number(maxTime.toFixed(3));
+  minDistance = Number(minDistance.toFixed(3));
+  maxDistance = Number(maxDistance.toFixed(3));
   return (
     <ResponsiveContainer width="100%" height={295}>
       <LineChart width={width == null ? 400 : width} height={260} data={data}>

@@ -26,6 +26,9 @@ export function SpeedTimeChart({
   maxSpeed,
   width,
 }: Props) {
+  maxTime = Number(maxTime.toFixed(3));
+  minSpeed = Number(minSpeed.toFixed(3));
+  maxSpeed = Number(maxSpeed.toFixed(3));
   return (
     <ResponsiveContainer width="100%" height={295}>
       <LineChart width={width == null ? 400 : width} height={260} data={data}>

@@ -15,7 +15,6 @@ export default function App() {
       <Route path="/mru" element={<MRUSimulator />} />
       <Route path="/muv" element={<MUVSimulator />} />
       <Route path="/ql" element={<QLSimulator />} />
-      <Route path="/test" element={<SimFrame />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

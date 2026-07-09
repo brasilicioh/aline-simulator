@@ -4,55 +4,151 @@ import { useEffect, useRef, useState } from "react";
 
 import { useAnimation } from "@animation";
 
-import { buildMRUGraphData } from "@mru/graph";
-import { calculateMRUDuration } from "@mru/formulas";
+import { renderPosition } from "@muv/../utils";
+import type { MoveStatus } from "@muv/../types";
 import {
-  startMRUAnimation,
-  pauseMRUAnimation,
-  resetMRUAnimation,
-} from "@mru/animate";
-
-import type { MoveStatus } from "@mru/../types";
-import SimFrame from "../../components/frames/SimFrame";
-import { renderPosition, verifyValues } from "@mru/../utils";
+  pauseMUVAnimation,
+  resetMUVAnimation,
+  startMUVAnimation,
+} from "@muv/animate";
+import { calculateMUVDuration, calculateMUVFinalSpeed } from "@muv/formulas";
+import { buildMUVGraphData, buildMUVVelocityGraphData } from "@muv/graph";
 
 export function QLSimulator() {
 
-  const [moveType, setMoveType] = useState<MoveStatus>("start");
-  // estados obtidos via entrada
-  const [speed, setSpeed] = useState<number>(1);
-  const [gravity, setGravity] = useState<number>(9.8);
-  const [startPosition, setStartPosition] = useState<number>(10);
+  const [gravity, setGravity] = useState<number>(10);
+  const [speed, setSpeed] = useState<number>(0);
+  const [initialPosition, setInitialPosition] = useState<number>(100);
+  const [startPosition, setStartPosition] = useState<number>(100);
   const [finalPosition, setFinalPosition] = useState<number>(0);
-  
-  // estado que guarda quanto tempo de animação se passou
+
+  const [moveType, setMoveType] = useState<MoveStatus>("start");
   const [timePassing, setTimePassing] = useState<number>(0);
-  
-  // constantes usadas em cálculo, respectivamente:
-  // posição final "alvo"; distância a ser percorrida; a duração nesse perccurso
-  const targetPosition = speed > 0 ? finalPosition : startPosition;
-  const distanceToTravel = Math.abs(targetPosition - startPosition);
-  const duration = calculateMRUDuration(speed, distanceToTravel);
-  
-  // dados que montam o gráfico
-  const graphData = buildMRUGraphData(
-    speed,
-    startPosition,
-    targetPosition,
-    timePassing,
-  );
-  
-  // referências usadas para, respectivamente:
-  // informações do corpo; delimitação da "pista de movimento"; progresso (0-1) de movimentação até o fim
+
   const imageRef = useRef<HTMLImageElement>(null);
   const screenRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef(0);
-  
-  // constante que guarda as funções de movimento
-  const animation = useAnimation();
 
-  const isMoving = moveType === "moving";
-  
+  const animation = useAnimation();
+  const targetPosition = speed >= 0 ? finalPosition : startPosition;
+  const maxSpeed =
+    calculateMUVFinalSpeed(
+      speed,
+      gravity,
+      targetPosition - initialPosition,
+    ) | 0;
+
+  const duration = calculateMUVDuration(
+    initialPosition,
+    targetPosition,
+    speed,
+    gravity,
+  );
+
+  const positionGraphData = buildMUVGraphData(
+    initialPosition,
+    speed,
+    gravity,
+    timePassing,
+  );
+
+  const velocityGraphData = buildMUVVelocityGraphData(
+    speed,
+    gravity,
+    timePassing,
+  );
+
+  const renderAnimatedPosition = (position: number) => {
+    renderPosition({
+      image: imageRef.current,
+      positionInMeters: position,
+      startPosition,
+      finalPosition,
+      trackWidth: screenRef.current?.clientWidth ?? 0,
+    });
+  };
+
+  const startAnimation = () => {
+    if (!Number.isFinite(duration) || duration <= 0) {
+      alert("Não foi possível iniciar com os valores atuais.");
+      return;
+    }
+
+    setMoveType("moving");
+
+    startMUVAnimation({
+      animation,
+      duration,
+      initialPosition,
+      initialSpeed: speed,
+      acceleration: gravity,
+      targetPosition,
+      startPosition,
+      finalPosition,
+      progressRef,
+      setTimePassing,
+      onPositionChange: renderAnimatedPosition,
+      onFinish() {
+        setMoveType("end");
+      },
+    });
+  };
+
+  const pauseAnimation = () => {
+    pauseMUVAnimation(animation);
+    setMoveType("paused");
+  };
+
+  const continueAnimation = () => {
+    if (!Number.isFinite(duration) || duration <= 0) {
+      alert("Não foi possível continuar com os valores atuais.");
+      return;
+    }
+
+    setMoveType("moving");
+
+    startMUVAnimation({
+      animation,
+      duration,
+      initialPosition,
+      initialSpeed: speed,
+      acceleration: gravity,
+      targetPosition,
+      startPosition,
+      finalPosition,
+      initialProgress: progressRef.current,
+      progressRef,
+      setTimePassing,
+      onPositionChange: renderAnimatedPosition,
+      onFinish() {
+        setMoveType("end");
+      },
+    });
+  };
+
+  const resetAnimation = () => {
+    resetMUVAnimation({
+      animation,
+      progressRef,
+      setTimePassing,
+      onResetPosition() {
+        renderAnimatedPosition(initialPosition);
+      },
+    });
+    setMoveType("start");
+  };
+
+  useEffect(() => {
+    if (moveType !== "start") return;
+    renderPosition({
+      image: imageRef.current,
+      positionInMeters: initialPosition,
+      startPosition,
+      finalPosition,
+      trackWidth: screenRef.current?.clientWidth ?? 0,
+    });
+  }, [moveType, initialPosition, startPosition, finalPosition]);
+
   return (
     <QLSimFrame
       speed={speed} setSpeed={setSpeed}
@@ -64,10 +160,14 @@ export function QLSimulator() {
 
       screenRef={screenRef} imageRef={imageRef}
       
-      //startAnimation={startAnimation} pauseAnimation={pauseAnimation}
-      //continueAnimation={continueAnimation} resetAnimation={resetAnimation}
+      startAnimation={startAnimation} pauseAnimation={pauseAnimation}
+      continueAnimation={continueAnimation} resetAnimation={resetAnimation}
 
-      graphData={graphData} maxTime={duration}
+      graphData={positionGraphData} velocityGraphData={velocityGraphData} 
+      
+      duration={duration}
+      maxSpeed={maxSpeed}
+      minSpeed={speed}
     />
   )
 }

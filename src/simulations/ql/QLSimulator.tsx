@@ -15,6 +15,11 @@ import { calculateMUVDuration, calculateMUVFinalSpeed } from "@muv/formulas";
 import { buildMUVGraphData, buildMUVVelocityGraphData } from "@muv/graph";
 
 export function QLSimulator() {
+  return (
+    <div className="bg-gray-800 flex flex-col gap-3 items-center min-h-screen">
+      <p className="text-4xl font-semibold text-center">Em desenvolvimento</p>
+    </div>
+  );
 
   const [gravity, setGravity] = useState<number>(10);
   const [speed, setSpeed] = useState<number>(0);
@@ -32,11 +37,8 @@ export function QLSimulator() {
   const animation = useAnimation();
   const targetPosition = speed >= 0 ? finalPosition : startPosition;
   const maxSpeed =
-    calculateMUVFinalSpeed(
-      speed,
-      gravity,
-      targetPosition - initialPosition,
-    ) | 0;
+    calculateMUVFinalSpeed(speed, gravity, targetPosition - initialPosition) |
+    0;
 
   const duration = calculateMUVDuration(
     initialPosition,
@@ -151,23 +153,28 @@ export function QLSimulator() {
 
   return (
     <QLSimFrame
-      speed={speed} setSpeed={setSpeed}
-      gravity={gravity} setGravity={setGravity}
-      startPosition={startPosition} setStartPosition={setStartPosition}
-      finalPosition={finalPosition} setFinalPosition={setFinalPosition}
-      timePassing={timePassing} setTimePassing={setTimePassing}
+      speed={speed}
+      setSpeed={setSpeed}
+      gravity={gravity}
+      setGravity={setGravity}
+      startPosition={startPosition}
+      setStartPosition={setStartPosition}
+      finalPosition={finalPosition}
+      setFinalPosition={setFinalPosition}
+      timePassing={timePassing}
+      setTimePassing={setTimePassing}
       moveType={moveType}
-
-      screenRef={screenRef} imageRef={imageRef}
-      
-      startAnimation={startAnimation} pauseAnimation={pauseAnimation}
-      continueAnimation={continueAnimation} resetAnimation={resetAnimation}
-
-      graphData={positionGraphData} velocityGraphData={velocityGraphData} 
-      
+      screenRef={screenRef}
+      imageRef={imageRef}
+      startAnimation={startAnimation}
+      pauseAnimation={pauseAnimation}
+      continueAnimation={continueAnimation}
+      resetAnimation={resetAnimation}
+      graphData={positionGraphData}
+      velocityGraphData={velocityGraphData}
       duration={duration}
       maxSpeed={maxSpeed}
       minSpeed={speed}
     />
-  )
+  );
 }

@@ -119,7 +119,7 @@ export default function SimFrame({
                   <div className="flex">
                     {moveType === "start" && (
                       <button
-                        className="bg-blue-800 text-white flex justify-center p-2 w-10"
+                        className="bg-blue-700 text-white flex justify-center p-2 w-10 cursor-pointer hover:bg-blue-900"
                         onClick={startAnimation}
                       >
                         <FaPlay className="size-4 sm:size-4" />
@@ -127,7 +127,7 @@ export default function SimFrame({
                     )}
                     {moveType === "moving" && (
                       <button
-                        className="bg-blue-800 text-white flex justify-center p-2 w-10"
+                        className="bg-blue-700 text-white flex justify-center p-2 w-10 cursor-pointer hover:bg-blue-900"
                         onClick={pauseAnimation}
                       >
                         <FaPause className="size-4 sm:size-4" />
@@ -136,13 +136,13 @@ export default function SimFrame({
                     {moveType === "paused" && (
                       <>
                         <button
-                          className="bg-blue-800 text-white flex justify-center p-2 w-10"
+                          className="bg-blue-700 text-white flex justify-center p-2 w-10 cursor-pointer hover:bg-blue-900"
                           onClick={continueAnimation}
                         >
                           <FaPlay className="size-4 sm:size-4" />
                         </button>
                         <button
-                          className="bg-blue-800 text-white flex justify-center p-2 w-10"
+                          className="bg-blue-700 text-white flex justify-center p-2 w-10 cursor-pointer hover:bg-blue-900"
                           onClick={resetAnimation}
                         >
                           <MdOutlineReplay className="size-4 sm:size-4" />
@@ -151,14 +151,14 @@ export default function SimFrame({
                     )}
                     {moveType === "end" && (
                       <button
-                        className="bg-blue-800 text-white flex justify-center p-2 w-10"
+                        className="bg-blue-700 text-white flex justify-center p-2 w-10 cursor-pointer hover:bg-blue-900"
                         onClick={resetAnimation}
                       >
                         <MdOutlineReplay className="size-4 sm:size-4" />
                       </button>
                     )}
                     <button
-                      className="bg-blue-800 text-white flex justify-center p-2 w-10"
+                      className="bg-blue-700 text-white flex justify-center p-2 w-10 cursor-pointer hover:bg-blue-900"
                       onClick={() => {
                         void navigate("/");
                       }}
@@ -271,7 +271,7 @@ export default function SimFrame({
               {!isMUV && <p>Tempo passado: {timePassing.toFixed(3)}</p>}
               {moveType === "start" && !isMUV && (
                 <button
-                  className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]"
+                  className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%] cursor-pointer hover:bg-[#48484883]"
                   onClick={startAnimation}
                 >
                   <FaPlay className="size-6 sm:size-8 col-start-1" />
@@ -324,7 +324,7 @@ export default function SimFrame({
 
               {!isMUV && (
                 <button
-                  className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]"
+                  className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%] cursor-pointer hover:bg-[#48484883]"
                   onClick={() => {
                     void navigate("/");
                   }}

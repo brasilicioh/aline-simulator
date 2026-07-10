@@ -1,20 +1,20 @@
-import { useState } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { Credits } from "@pages/Credits";
+import { MainPage } from "@pages/MainPage";
+
+import { MRUSimulator } from "@mru/MRUSimulator";
+import { MUVSimulator } from "@muv/MUVSimulator";
+import { QLSimulator } from "@ql/QLSimulator";
 
 export default function App() {
-  const [count, setCount] = useState<number>(0);
-
   return (
-    <>
-      <h1>Aline's Simulator</h1>
-
-      <p>Contador porque sim: {count}</p>
-      <button
-        onClick={() => {
-          setCount(count + 1);
-        }}
-      >
-        Aumentar
-      </button>
-    </>
+    <Routes>
+      <Route path="/" element={<MainPage />} />
+      <Route path="/credits" element={<Credits />} />
+      <Route path="/mru" element={<MRUSimulator />} />
+      <Route path="/muv" element={<MUVSimulator />} />
+      {/* <Route path="/ql" element={<QLSimulator />} /> */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }

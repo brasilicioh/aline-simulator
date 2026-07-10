@@ -21,50 +21,67 @@ export function calculateMUVSpeed(
 
 export function calculateMUVDuration(
   initialPosition: number,
+  startPosition: number,
+  finalPosition: number,
   targetPosition: number,
   initialSpeed: number,
   acceleration: number,
-) {
+): [number, number] {
   // tá no destino.
-  if (Math.abs(targetPosition - initialPosition) < 0) {
-    return 0;
-  }
+  if (targetPosition - initialPosition === 0) return [0, targetPosition];
 
   // mru
   if (Math.abs(acceleration) == 0) {
-    if (Math.abs(initialSpeed) < 0) return NaN;
-
+    if (Math.abs(initialSpeed) == 0) return [NaN, targetPosition];
     const time = (targetPosition - initialPosition) / initialSpeed;
-    return time >= 0 ? time : NaN;
+    return [time >= 0 ? time : NaN, targetPosition];
   }
 
   // Resolve:
   // (a/2)t² + v0*t + (s0 - sTarget) = 0
-  const a = acceleration / 2;
-  const b = initialSpeed;
-  const c = initialPosition - targetPosition;
+  const solveTime = (start: number, end: number, speed: number): number => {
+    const a = acceleration / 2;
+    const b = speed;
+    const c = start - end;
 
-  const delta = b * b - 4 * a * c;
-
-  if (delta >= 0) {
-    const sqrtDelta = Math.sqrt(Math.max(0, delta));
+    const delta = b * b - 4 * a * c;
+    if (delta < 0) return NaN;
+    const sqrtDelta = Math.sqrt(delta);
 
     const t1 = (-b + sqrtDelta) / (2 * a);
     const t2 = (-b - sqrtDelta) / (2 * a);
 
     const valid = [t1, t2].filter((time) => Number.isFinite(time) && time >= 0);
 
-    if (valid.length > 0) return Math.min(...valid);
-  }
+    return valid.length ? Math.min(...valid) : NaN;
+  };
 
-  // não chegou ao destino.
-  // retorna ao ponto inicial?
-  const returnTime = (-2 * initialSpeed) / acceleration;
+  // 1°: do início ao alvo (direct == NaN -> não chega ao alvo)
+  const direct = solveTime(initialPosition, targetPosition, initialSpeed);
 
-  if (Number.isFinite(returnTime) && returnTime > 0) return returnTime;
+  if (!Number.isNaN(direct)) return [direct, targetPosition];
 
-  // não chegou no destino e nem ao ponto inicial
-  return NaN;
+  // 2°: não chegou no alvo; calcular quando velocidade zera
+  const turnTime = -initialSpeed / acceleration;
+
+  if (!Number.isFinite(turnTime) || turnTime <= 0) return [NaN, targetPosition];
+
+  // 3°: posição onde corpo para
+  const turnPosition =
+    initialPosition +
+    initialSpeed * turnTime +
+    0.5 * acceleration * turnTime * turnTime;
+
+  // qual extremidade ele vai depois de inverter?
+  const returnTarget =
+    initialSpeed > 0
+      ? startPosition // estava indo para direita, volta para esuerda
+      : finalPosition; // estava indo para esquerda, volta para direita
+
+  const back = solveTime(turnPosition, returnTarget, 0);
+  if (Number.isNaN(back)) return [NaN, returnTarget];
+
+  return [turnTime + back, returnTarget];
 }
 
 export function calculateMUVFinalSpeed(

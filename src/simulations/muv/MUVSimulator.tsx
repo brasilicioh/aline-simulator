@@ -35,8 +35,10 @@ export function MUVSimulator() {
       targetPosition - initialPosition,
     ) | 0;
 
-  const duration = calculateMUVDuration(
+  const [duration, realTargetPosition] = calculateMUVDuration(
     initialPosition,
+    startPosition,
+    finalPosition,
     targetPosition,
     speed,
     acceleration,
@@ -79,7 +81,7 @@ export function MUVSimulator() {
       initialPosition,
       initialSpeed: speed,
       acceleration: acceleration,
-      targetPosition,
+      targetPosition: realTargetPosition,
       startPosition,
       finalPosition,
       progressRef,
@@ -110,7 +112,7 @@ export function MUVSimulator() {
       initialPosition,
       initialSpeed: speed,
       acceleration: acceleration,
-      targetPosition,
+      targetPosition: realTargetPosition,
       startPosition,
       finalPosition,
       initialProgress: progressRef.current,

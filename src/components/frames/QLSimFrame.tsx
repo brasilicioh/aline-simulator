@@ -1,6 +1,15 @@
+import { useState } from "react";
+
 import { PositionTimeChart } from "@charts/PositionTimeChart";
+import { SpeedTimeChart } from "@charts/SpeedTimeChart";
 import { useNavigate } from "react-router-dom";
 import aline from "@assets/aline.png";
+
+import earth from "@assets/earth.jpeg";
+import moon from "@assets/lunar.jpeg"
+import venus from "@assets/venus.jpeg"
+import mars from "@assets/mars.jpeg"
+
 import { SliderControl } from "../utils/SliderControl";
 import { IoHomeOutline } from "react-icons/io5";
 import { MdOutlineReplay } from "react-icons/md";
@@ -40,7 +49,11 @@ interface SimProps {
 
   //plott
   graphData: {time: number, space: number}[]; 
-  maxTime: number;
+  velocityGraphData?: {time: number, speed: number}[]; 
+
+  duration: number;
+  maxSpeed?: number;
+  minSpeed?: number;
 }
 
 export function QLSimFrame({
@@ -55,7 +68,10 @@ export function QLSimFrame({
 
   startAnimation, pauseAnimation, continueAnimation, resetAnimation,
 
-  graphData, maxTime,
+  graphData, velocityGraphData,
+  duration,
+  maxSpeed,
+  minSpeed
 }: SimProps){
   const navigate = useNavigate();
   const totalDistance = startPosition;
@@ -63,6 +79,25 @@ export function QLSimFrame({
   const scale = 100;
 
   const zoom = maxZoom / (1 + totalDistance / scale);
+  const disabledInputs: boolean = moveType !== "start";
+
+  const [bgImage, setBgImage] = useState(moon);
+
+  const handleGravityChange = (event) => {
+    const escolha = event.target.value;
+
+    if (escolha == 1) {
+      setBgImage(moon);
+    } else if (escolha == 4) {
+      setBgImage(mars);
+    } else if (escolha == 10) {
+      setBgImage(earth);
+    } else if (escolha == 9) {
+      setBgImage(venus);
+    } else{
+      setBgImage(earth)
+    }
+  };
 
   return(
     <div className="w-full h-screen max-h-screen bg-[#0D1117] overflow-x-hidden">
@@ -71,8 +106,9 @@ export function QLSimFrame({
         <div className="row-span-6 flex items-center justify-center"> 
           {/* sidescreen */}
           <div className="h-[95%] w-[80%] border-black border-4 border-bs-gray-600 border-s-gray-600 flex items-center justify-center relative">
-            <div ref={screenRef} className="bg-[url('@assets/lunar.jpeg')] bg-cover bg-bottom size-full bg-repeat-y"
+            <div ref={screenRef} className="bg-cover bg-bottom size-full bg-repeat-y"
             style={{
+                backgroundImage: `url(${bgImage})`,
                 backgroundSize: `${zoom}%`
               }}
             >
@@ -81,6 +117,7 @@ export function QLSimFrame({
                 src={aline}
                 className="absolute rounded-full -translate-x-1/2 left-1/2 top-0 w-24 select-none"
               />
+              <p className="absolute -translate-x-1/2 left-1/2 bottom-0 bg-blue-600 text-white w-40">Tempo passado: {timePassing.toFixed(3)}</p>
             </div>
           </div>
         </div>
@@ -100,13 +137,20 @@ export function QLSimFrame({
                     step={1}
                     value={startPosition}
                     onChange={setStartPosition}
+                    disabled={disabledInputs}
                   />
                 </div>
 
                 {/* Select */}
                 <div className="flex items-center">
-                  <select className="w-full h-9 bg-neutral-700 rounded px-2 text-sm">
-                    <option>Terra</option>
+                  <select className="w-full h-9 bg-neutral-700 rounded px-2 text-sm"
+                    onChange={handleGravityChange}
+                  >
+                    <option value={10}>Terra</option>
+                    <option value={1}>Lua</option>
+                    <option value={4}>Marte</option>
+                    <option value={9}>Venus</option>
+                    <option value={100}>Sol</option>
                   </select>
                 </div>
 
@@ -119,6 +163,7 @@ export function QLSimFrame({
                     step={1}
                     value={gravity}
                     onChange={setGravity}
+                    disabled={disabledInputs}
                   />
                 </div>
 
@@ -168,17 +213,17 @@ export function QLSimFrame({
             <div className="row-span-2 bg-black rounded-xl flex items-center justify-center border-white border-2 text-white items">
               <PositionTimeChart
                 data={graphData}
-                maxTime={maxTime}
+                maxTime={duration}
                 minDistance={startPosition}
                 maxDistance={finalPosition}
                 width={300}
               />
 
-              <PositionTimeChart
-                data={graphData}
-                maxTime={maxTime}
-                minDistance={startPosition}
-                maxDistance={finalPosition}
+              <SpeedTimeChart
+                data={velocityGraphData}
+                maxTime={duration}
+                minSpeed={speed}
+                maxSpeed={maxSpeed}
                 width={300}
               />
             </div>

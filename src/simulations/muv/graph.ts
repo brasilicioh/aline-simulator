@@ -1,4 +1,4 @@
-import { calculateMUVPosition, calculateMUVSpeed } from "./formulas";
+import { calculateMUVPosition, calculateMUVSpeed } from "@muv/formulas";
 
 type Point = { time: number; space: number };
 type VelocityPoint = { time: number; speed: number };

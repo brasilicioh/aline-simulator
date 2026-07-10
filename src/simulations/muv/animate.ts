@@ -1,6 +1,6 @@
 import type { useAnimation } from "@animation";
 
-import { calculateMUVPosition } from "./formulas";
+import { calculateMUVPosition } from "@muv/formulas";
 
 type AnimationController = ReturnType<typeof useAnimation>;
 

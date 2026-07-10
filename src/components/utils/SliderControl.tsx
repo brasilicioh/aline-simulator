@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 type SliderControlProps = {
   label: string;
   value: number;
@@ -17,6 +19,35 @@ export function SliderControl({
   onChange,
   disabled,
 }: SliderControlProps) {
+  const [showValue, setShowValue] = useState(value.toString());
+
+  const handleInput = () => {
+    if (showValue == "") {
+      setShowValue(value.toString());
+      return;
+    }
+
+    const num = Number(showValue);
+
+    if (Number.isNaN(num)) {
+      setShowValue(value.toString());
+      return;
+    }
+
+    const inputNumber = Math.min(max, Math.max(min, num));
+
+    onChange(inputNumber);
+    setShowValue(inputNumber.toString());
+  };
+
+  useEffect(() => {
+    const setValue = () => {
+      setShowValue(value.toString());
+    };
+
+    setValue();
+  }, [value]);
+
   return (
     // TODO: USAR UM TOOLTIP OU SEI LÁ
     <div title={disabled ? "Volte a animação para editar valores" : undefined}>
@@ -31,7 +62,7 @@ export function SliderControl({
           min={min}
           max={max}
           step={step}
-          value={value}
+          value={showValue}
           onChange={(e) => {
             onChange(Number(e.target.value));
           }}
@@ -44,9 +75,15 @@ export function SliderControl({
           <div className="bg-zinc-700 rounded text-xs w-20 text-center">
             <input
               type="number"
-              value={value}
-              min={min}
-              max={max}
+              inputMode="numeric"
+              value={showValue}
+              onBlur={handleInput}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleInput();
+                  e.currentTarget.blur();
+                }
+              }}
               onChange={(e) => {
                 const raw = Number(e.target.value);
 

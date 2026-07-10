@@ -31,7 +31,7 @@ export function calculateMUVDuration(
   }
 
   // mru
-  if (Math.abs(acceleration) < 0) {
+  if (Math.abs(acceleration) == 0) {
     if (Math.abs(initialSpeed) < 0) return NaN;
 
     const time = (targetPosition - initialPosition) / initialSpeed;

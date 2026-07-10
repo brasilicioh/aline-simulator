@@ -1,4 +1,4 @@
-import { calculateMUVPosition, calculateMUVSpeed } from "@muv/formulas";
+import { calculateMUVPosition, calculateMUVSpeed } from "@ql/formulas";
 
 type Point = { time: number; space: number };
 type VelocityPoint = { time: number; speed: number };

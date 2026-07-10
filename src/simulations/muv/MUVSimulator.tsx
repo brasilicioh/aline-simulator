@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import SimFrame from "../../components/frames/SimFrame";
 
 import { useAnimation } from "@animation";
 import { renderPosition } from "@muv/../utils";
@@ -11,6 +10,8 @@ import {
 } from "@muv/animate";
 import { calculateMUVDuration, calculateMUVFinalSpeed } from "@muv/formulas";
 import { buildMUVGraphData, buildMUVVelocityGraphData } from "@muv/graph";
+
+import SimFrame from "@frames/SimFrame";
 
 export function MUVSimulator() {
   const [acceleration, setAcceleration] = useState<number>(0);

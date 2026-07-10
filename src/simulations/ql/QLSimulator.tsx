@@ -1,18 +1,18 @@
-import { QLSimFrame } from "../../components/frames/QLSimFrame";
+import { QLSimFrame } from "@frames/QLSimFrame";
 
 import { useEffect, useRef, useState } from "react";
 
 import { useAnimation } from "@animation";
 
-import { renderPosition } from "@muv/../utils";
-import type { MoveStatus } from "@muv/../types";
+import { renderPosition } from "@ql/../utils";
+import type { MoveStatus } from "@ql/../types";
 import {
   pauseMUVAnimation,
   resetMUVAnimation,
   startMUVAnimation,
-} from "@muv/animate";
-import { calculateMUVDuration, calculateMUVFinalSpeed } from "@muv/formulas";
-import { buildMUVGraphData, buildMUVVelocityGraphData } from "@muv/graph";
+} from "@ql/animate";
+import { calculateMUVDuration, calculateMUVFinalSpeed } from "@ql/formulas";
+import { buildMUVGraphData, buildMUVVelocityGraphData } from "@ql/graph";
 
 export function QLSimulator() {
   return (

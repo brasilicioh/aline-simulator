@@ -16,6 +16,9 @@ export default defineConfig({
       "@charts": resolve(__dirname, "src/components/charts"),
       "@animation": resolve(__dirname, "src/hooks/useAnimation.ts"),
       "@assets": resolve(__dirname, "./src/assets"),
+      "@simulations": resolve(__dirname, "./src/simulations"),
+      "@frames": resolve(__dirname, "./src/components/frames"),
+      "@utils": resolve(__dirname, "./src/components/utils"),
     },
   },
 });

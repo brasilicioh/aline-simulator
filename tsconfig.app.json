@@ -17,7 +17,9 @@
       "@ql/*": ["./src/simulations/ql/*"],
       "@charts/*": ["./src/components/charts/*"],
       "@animation": ["./src/hooks/useAnimation.ts"],
-      "@assets/*": ["./src/assets/*"]
+      "@assets/*": ["./src/assets/*"],
+      "@frames/*": ["./src/components/frames/*"],
+      "@utils/*": ["./src/components/utils/*"],
     },
 
     "moduleResolution": "bundler",

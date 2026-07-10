@@ -11,8 +11,9 @@ import {
 } from "@mru/animate";
 
 import type { MoveStatus } from "@mru/../types";
-import SimFrame from "../../components/frames/SimFrame";
 import { renderPosition, verifyValues } from "@mru/../utils";
+
+import SimFrame from "@frames/SimFrame";
 
 export function MRUSimulator() {
   // estado que define o tipo de movimento atual da imagem

@@ -24,11 +24,11 @@ export function PositionTimeChart({
   maxTime,
   minDistance,
   maxDistance,
-  width
+  width,
 }: Props) {
   return (
     <ResponsiveContainer width="100%" height={295}>
-      <LineChart width={width == null?400:width} height={260} data={data}>
+      <LineChart width={width == null ? 400 : width} height={260} data={data}>
         <CartesianGrid stroke="#555" strokeDasharray="3 5" opacity={0.4} />
         <XAxis
           stroke="#fff"
@@ -78,4 +78,3 @@ export function PositionTimeChart({
     </ResponsiveContainer>
   );
 }
-

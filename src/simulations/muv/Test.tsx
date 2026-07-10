@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import SimFrame from "../../components/frames/SimFrame";
 
+import { PositionTimeChart } from "@charts/PositionTimeChart";
+import { SpeedTimeChart } from "@charts/SpeedTimeChart";
+
+import aline from "@assets/aline.png";
 import { useAnimation } from "@animation";
 import { renderPosition } from "@muv/../utils";
 import type { MoveStatus } from "@muv/../types";
@@ -12,12 +15,12 @@ import {
 import { calculateMUVDuration, calculateMUVFinalSpeed } from "@muv/formulas";
 import { buildMUVGraphData, buildMUVVelocityGraphData } from "@muv/graph";
 
-export function MUVSimulator() {
-  const [acceleration, setAcceleration] = useState<number>(0);
-  const [speed, setSpeed] = useState<number>(10);
+export function Test() {
+  const [acceleration, setAcceleration] = useState<number>(2);
+  const [speed, setSpeed] = useState<number>(4);
   const [initialPosition, setInitialPosition] = useState<number>(0);
-  const [startPosition, setStartPosition] = useState<number>(-50);
-  const [finalPosition, setFinalPosition] = useState<number>(50);
+  const [startPosition, setStartPosition] = useState<number>(0);
+  const [finalPosition, setFinalPosition] = useState<number>(45);
 
   const [moveType, setMoveType] = useState<MoveStatus>("start");
   const [timePassing, setTimePassing] = useState<number>(0);
@@ -148,33 +151,112 @@ export function MUVSimulator() {
 
   return (
     <>
-      <SimFrame
-        speed={speed}
-        setSpeed={setSpeed}
-        acceleration={acceleration}
-        setAcceleration={setAcceleration}
-        startPosition={startPosition}
-        setStartPosition={setStartPosition}
-        initialPosition={initialPosition}
-        setInitialPosition={setInitialPosition}
-        finalPosition={finalPosition}
-        setFinalPosition={setFinalPosition}
-        timePassing={timePassing}
-        setTimePassing={setTimePassing}
-        moveType={moveType}
-        screenRef={screenRef}
-        imageRef={imageRef}
-        startAnimation={startAnimation}
-        pauseAnimation={pauseAnimation}
-        continueAnimation={continueAnimation}
-        resetAnimation={resetAnimation}
-        graphData={positionGraphData}
-        velocityGraphData={velocityGraphData}
-        maxSpeed={maxSpeed}
-        minSpeed={speed}
-        duration={duration}
-        isMUV={true}
+      <h1>MUV</h1>
+
+      <p>Aceleração</p>
+      <input
+        type="number"
+        value={acceleration}
+        onChange={(e) => {
+          setAcceleration(Number(e.target.value));
+        }}
       />
+
+      <p>Velocidade</p>
+      <input
+        type="number"
+        value={speed}
+        onChange={(e) => {
+          setSpeed(Number(e.target.value));
+        }}
+      />
+
+      <p>Posição de aline</p>
+      <input
+        type="number"
+        value={initialPosition}
+        onChange={(e) => {
+          setInitialPosition(Number(e.target.value));
+        }}
+      />
+
+      <p>Espaço inicial</p>
+      <input
+        type="number"
+        value={startPosition}
+        onChange={(e) => {
+          setStartPosition(Number(e.target.value));
+        }}
+      />
+
+      <p>Espaço final</p>
+      <input
+        type="number"
+        value={finalPosition}
+        onChange={(e) => {
+          setFinalPosition(Number(e.target.value));
+        }}
+      />
+
+      <div
+        ref={screenRef}
+        className="w-full h-32 border border-black relative overflow-hidden"
+      >
+        <img
+          ref={imageRef}
+          src={aline}
+          alt="Aline"
+          className="absolute left-0 top-1/2 -translate-y-1/2 w-16"
+          draggable={false}
+        />
+        <div className="absolute bottom-0 left-0 text-xs bg-white/80 px-1">
+          Início ({startPosition}m)
+        </div>
+        <div className="absolute bottom-0 right-0 text-xs bg-white/80 px-1">
+          Fim ({finalPosition}m)
+        </div>
+      </div>
+
+      <div className="mt-3 flex gap-2 flex-wrap">
+        {moveType === "start" && (
+          <button onClick={startAnimation}>começar</button>
+        )}
+
+        {moveType === "moving" && (
+          <button onClick={pauseAnimation}>pausar</button>
+        )}
+
+        {moveType === "paused" && (
+          <>
+            <button onClick={continueAnimation}>voltar</button>
+            <button onClick={resetAnimation}>reiniciar</button>
+          </>
+        )}
+
+        {moveType === "end" && (
+          <button onClick={resetAnimation}>voltar ao início</button>
+        )}
+      </div>
+
+      <p>Tempo passado: {timePassing.toFixed(3)}s</p>
+
+      <div className="bg-black">
+        <PositionTimeChart
+          data={positionGraphData}
+          maxTime={Math.max(duration, timePassing)}
+          minDistance={startPosition}
+          maxDistance={finalPosition}
+        />
+      </div>
+
+      <div className="bg-black">
+        <SpeedTimeChart
+          data={velocityGraphData}
+          maxTime={Math.max(duration, timePassing)}
+          minSpeed={speed}
+          maxSpeed={maxSpeed}
+        />
+      </div>
     </>
   );
 }

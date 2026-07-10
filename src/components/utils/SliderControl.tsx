@@ -22,7 +22,8 @@ export function SliderControl({
     <div title={disabled ? "Volte a animação para editar valores" : undefined}>
       <div
         className={
-          "grid grid-rows-[auto_auto] gap-1" + (disabled ? " pointer-events-none" : "")
+          "grid grid-rows-[auto_auto] gap-1" +
+          (disabled ? " pointer-events-none" : "")
         }
       >
         <input
@@ -49,10 +50,7 @@ export function SliderControl({
               onChange={(e) => {
                 const raw = Number(e.target.value);
 
-                const newValue = Math.min(
-                  max,
-                  Math.max(min, raw)
-                );
+                const newValue = Math.min(max, Math.max(min, raw));
                 onChange(newValue);
               }}
               className="px-2 py-1 rounded w-20"

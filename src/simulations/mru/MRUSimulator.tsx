@@ -50,10 +50,6 @@ export function MRUSimulator() {
   // constante que guarda as funções de movimento
   const animation = useAnimation();
 
-  // booleano que delimita se os inputs podem ser alterados
-  // TODO: não permitir alterar inputs em pause
-  const isMoving = moveType === "moving";
-
   // função utilitária de renderização
   const renderAnimatedPosition = (position: number) => {
     renderPosition({
@@ -151,21 +147,28 @@ export function MRUSimulator() {
   return (
     <>
       <SimFrame
-      speed={speed} setSpeed={setSpeed}
-      acceleration={0} setAcceleration={setSpeed}
-      startPosition={startPosition} setStartPosition={setStartPosition}
-      initialPosition={initialPosition} setInitialPosition={setInitialPosition}
-      finalPosition={finalPosition} setFinalPosition={setFinalPosition}
-      timePassing={timePassing} setTimePassing={setTimePassing}
-      moveType={moveType}
-
-      screenRef={screenRef} imageRef={imageRef}
-      
-      startAnimation={startAnimation} pauseAnimation={pauseAnimation}
-      continueAnimation={continueAnimation} resetAnimation={resetAnimation}
-
-      graphData={graphData} maxTime={duration}
-      isMUV={false}
+        speed={speed}
+        setSpeed={setSpeed}
+        acceleration={0}
+        setAcceleration={setSpeed}
+        startPosition={startPosition}
+        setStartPosition={setStartPosition}
+        initialPosition={initialPosition}
+        setInitialPosition={setInitialPosition}
+        finalPosition={finalPosition}
+        setFinalPosition={setFinalPosition}
+        timePassing={timePassing}
+        setTimePassing={setTimePassing}
+        moveType={moveType}
+        screenRef={screenRef}
+        imageRef={imageRef}
+        startAnimation={startAnimation}
+        pauseAnimation={pauseAnimation}
+        continueAnimation={continueAnimation}
+        resetAnimation={resetAnimation}
+        graphData={graphData}
+        duration={duration}
+        isMUV={false}
       />
     </>
   );

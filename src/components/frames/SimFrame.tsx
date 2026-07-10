@@ -281,7 +281,7 @@ export default function SimFrame({
               )}
               {moveType === "moving" && !isMUV && (
                 <button
-                  className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]"
+                  className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%] cursor-pointer hover:bg-[#48484883]"
                   onClick={pauseAnimation}
                 >
                   <FaPause className="size-6 sm:size-8 col-start-1" />
@@ -292,7 +292,7 @@ export default function SimFrame({
               {moveType === "paused" && !isMUV && (
                 <div className="grid grid-cols-2 gap-3 w-[80%]">
                   <button
-                    className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl"
+                    className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl cursor-pointer hover:bg-[#48484883]"
                     onClick={continueAnimation}
                   >
                     <FaPlay className="size-6 sm:size-8 col-start-1" />
@@ -301,7 +301,7 @@ export default function SimFrame({
                     </p>
                   </button>
                   <button
-                    className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl"
+                    className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl cursor-pointer hover:bg-[#48484883]"
                     onClick={resetAnimation}
                   >
                     <MdOutlineReplay className="size-6 sm:size-8 col-start-1" />
@@ -313,7 +313,7 @@ export default function SimFrame({
               )}
               {moveType === "end" && !isMUV && (
                 <button
-                  className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%]"
+                  className="bg-[#484848] grid grid-cols-[auto_1fr_auto] items-center p-2 sm:p-3 rounded-2xl w-[80%] cursor-pointer hover:bg-[#48484883]"
                   onClick={resetAnimation}
                 >
                   <MdOutlineReplay className="size-6 sm:size-8 col-start-1" />

@@ -4,7 +4,6 @@ import { MainPage } from "@pages/MainPage";
 
 import { MRUSimulator } from "@mru/MRUSimulator";
 import { MUVSimulator } from "@muv/MUVSimulator";
-import { Test } from "@muv/Test";
 import { QLSimulator } from "@ql/QLSimulator";
 
 export default function App() {
@@ -15,7 +14,6 @@ export default function App() {
       <Route path="/mru" element={<MRUSimulator />} />
       <Route path="/muv" element={<MUVSimulator />} />
       <Route path="/ql" element={<QLSimulator />} />
-      <Route path="/test" element={<Test />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

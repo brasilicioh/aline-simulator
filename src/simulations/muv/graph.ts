@@ -30,7 +30,10 @@ export function buildMUVGraphData(
       time,
     );
 
-    data.push({ time, space: position });
+    data.push({
+      time: Math.round(time * 1000) / 1000,
+      space: Math.round(position * 1000) / 1000,
+    });
   }
 
   return data;
@@ -53,10 +56,11 @@ export function buildMUVVelocityGraphData(
 
   for (let i = 1; i <= SEGMENTS; i++) {
     const time = (clampedElapsed * i) / SEGMENTS;
+    const speed = calculateMUVSpeed(initialSpeed, acceleration, time);
 
     data.push({
-      time,
-      speed: calculateMUVSpeed(initialSpeed, acceleration, time),
+      time: Math.round(time * 1000) / 1000,
+      speed: Math.round(speed * 1000) / 1000,
     });
   }
 

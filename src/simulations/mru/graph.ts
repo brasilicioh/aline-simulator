@@ -21,10 +21,16 @@ export function buildMRUGraphData(
 
   for (let i = 1; i <= segments; i++) {
     const time = (elapsedTime * i) / segments;
+    const position = calculateMRUPosition(
+      initialPosition,
+      targetPosition,
+      speed,
+      time,
+    );
 
     data.push({
-      time,
-      space: calculateMRUPosition(initialPosition, targetPosition, speed, time),
+      time: Math.round(time * 1000) / 1000,
+      space: Math.round(position * 1000) / 1000,
     });
   }
 
